@@ -3,16 +3,7 @@
 ## Proposed Architecture
 
 ```mermaid
-%%{init: {
-  'theme': 'base',
-  'themeVariables': {
-    'fontSize': '16px',
-    'fontFamily': 'Arial, sans-serif',
-    'nodeSpacing': 80,
-    'rankSpacing': 100
-  }
-}}%%
-graph TB
+graph TD
     A[Ethereum Node<br>WebSocket API]
     B[Block Subscriber]
     C[Block Processor]
@@ -20,23 +11,11 @@ graph TB
     E[API Service]
     F[Clients]
 
-    A --> |WebSocket<br>Subscription| B
-    B --> |New Block<br>Notifications| C
-    C --> |Processed<br>Block Data| D
-    D --> |Data Retrieval| E
-    E --> |HTTP Requests/<br>Responses| F
-
-    classDef default fill:#f0f0f0,stroke:#333,stroke-width:2px;
-    class A,B,C,D,E,F default;
-
-    linkStyle default stroke-width:2px,fill:none,stroke:#666;
-
-    subgraph " "
-    A
-    end
-    subgraph " "
-    F
-    end
+    A -->|WebSocket Subscription| B
+    B -->|New Block Notifications| C
+    C -->|Processed Block Data| D
+    D -->|Data Retrieval| E
+    E -->|HTTP Requests/Responses| F
 ```
 
 ## Proposed Project Structure
