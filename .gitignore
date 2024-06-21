@@ -1,0 +1,5 @@
+# Project specific
+.env
+
+# Dependency directories 
+/vendor/
