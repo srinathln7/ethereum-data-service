@@ -3,7 +3,16 @@
 ## Proposed Architecture
 
 ```mermaid
-graph LR
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontSize': '16px',
+    'fontFamily': 'Arial, sans-serif',
+    'nodeSpacing': 80,
+    'rankSpacing': 100
+  }
+}}%%
+graph TB
     A[Ethereum Node<br>WebSocket API]
     B[Block Subscriber]
     C[Block Processor]
@@ -11,18 +20,23 @@ graph LR
     E[API Service]
     F[Clients]
 
-    A -->|WebSocket Subscription| B
-    B -->|New Block Notifications| C
-    C -->|Processed Block Data| D
-    D -->|Data Retrieval| E
-    E -->|HTTP Requests/Responses| F
+    A --> |WebSocket<br>Subscription| B
+    B --> |New Block<br>Notifications| C
+    C --> |Processed<br>Block Data| D
+    D --> |Data Retrieval| E
+    E --> |HTTP Requests/<br>Responses| F
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#bfb,stroke:#333,stroke-width:2px
-    style D fill:#fbf,stroke:#333,stroke-width:2px
-    style E fill:#ff9,stroke:#333,stroke-width:2px
-    style F fill:#f99,stroke:#333,stroke-width:2px
+    classDef default fill:#f0f0f0,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E,F default;
+
+    linkStyle default stroke-width:2px,fill:none,stroke:#666;
+
+    subgraph " "
+    A
+    end
+    subgraph " "
+    F
+    end
 ```
 
 ## Proposed Project Structure
