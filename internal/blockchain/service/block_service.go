@@ -27,4 +27,5 @@ func GetLatest50BlockNumbers(client *ethclient.Client) [50]uint64 {
 		blockNumbers[i] = start + uint64(i)
 	}
 	return blockNumbers
+
 }
