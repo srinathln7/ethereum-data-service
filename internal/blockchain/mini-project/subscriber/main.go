@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	"project/common"
 
@@ -13,19 +14,45 @@ import (
 
 // Function to add a new block and trim the list
 func addBlock(rdb *redis.Client, blockData common.BlockData) error {
-	// Marshal BlockData to JSON
-	blockDataJSON, err := json.Marshal(blockData)
+
+	expiryTime := time.Duration(70 * time.Second)
+	ctx := context.Background()
+
+	// Index the block by its number for quick retrieval
+	blockKey := fmt.Sprintf("block:%d", blockData.Block.Header.Number)
+	blockDataJSON, err := json.Marshal(blockData.Block)
 	if err != nil {
-		return fmt.Errorf("failed to marshal block data: %w", err)
+		return err
 	}
 
-	// Add the new block to the head of the list
-	if err := rdb.LPush(context.Background(), "latest_blocks", blockDataJSON).Err(); err != nil {
+	if err := rdb.Set(ctx, blockKey, blockDataJSON, expiryTime).Err(); err != nil {
 		return err
 	}
-	// Trim the list to keep only the latest 50 blocks
-	if err := rdb.LTrim(context.Background(), "latest_blocks", 0, 49).Err(); err != nil {
-		return err
+
+	// Index transactions and events with block's expiry
+	for txHash, tx := range blockData.TransactionHashes {
+		txKey := fmt.Sprintf("tx:%s", txHash)
+		txJSON, err := json.Marshal(tx)
+		if err != nil {
+			return err
+		}
+		if err := rdb.Set(ctx, txKey, txJSON, expiryTime).Err(); err != nil {
+			return err
+		}
+	}
+
+	// Index address to retrieve all events associated with the address
+	for _, events := range blockData.Events {
+		for _, event := range events {
+			eventJSON, err := json.Marshal(event)
+			if err != nil {
+				return err
+			}
+			addressKey := fmt.Sprintf("event:%s", event.Address)
+			if err := rdb.Set(ctx, addressKey, eventJSON, expiryTime).Err(); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }
@@ -57,7 +84,7 @@ func main() {
 		if err != nil {
 			log.Printf("Failed to store block data in Redis: %v", err)
 		} else {
-			fmt.Printf("Stored block %d in Redis\n", blockData.Number)
+			fmt.Printf("Stored block %d in Redis\n", blockData.Block.Header.Number)
 		}
 	}
 }

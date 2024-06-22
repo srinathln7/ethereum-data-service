@@ -13,17 +13,26 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-func publishBlock(rdb *redis.Client, block *types.Block) error {
+func publishBlock(client *ethclient.Client, rdb *redis.Client, block *types.Block) error {
+
 	// Convert types.Block to common.BlockData
-	transactionHashes := make([]string, block.Transactions().Len())
-	for idx, tx := range block.Transactions() {
-		transactionHashes[idx] = tx.Hash().Hex()
+	blockData := common.BlockData{
+		Block:             common.Block{Header: block.Header(), Body: block.Body()},
+		TransactionHashes: make(map[string]*types.Transaction),
+		Events:            make(map[string][]*types.Log),
 	}
 
-	blockData := common.BlockData{
-		Number:            block.NumberU64(),
-		Hash:              block.Hash().Hex(),
-		TransactionHashes: transactionHashes,
+	// Get transaction hashes and all events related to each transaction in each block
+	for _, tx := range block.Transactions() {
+		blockData.TransactionHashes[tx.Hash().Hex()] = tx
+
+		// Fetch events for each transaction
+		receipt, err := client.TransactionReceipt(context.Background(), tx.Hash())
+		if err != nil {
+			return err
+		}
+
+		blockData.Events[tx.Hash().Hex()] = receipt.Logs
 	}
 
 	// Marshal BlockData to JSON
@@ -69,10 +78,10 @@ func main() {
 			if err != nil {
 				log.Fatalf("Failed to get block: %v", err)
 			}
-			if err := publishBlock(rdb, block); err != nil {
+			if err := publishBlock(client, rdb, block); err != nil {
 				log.Fatalf("Failed to publish block: %v", err)
 			}
-			log.Printf("Published new block: %d\n", block.NumberU64())
+			log.Printf("Published new block: %d\n", blockNumber)
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package common
 
 import (
+	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -13,9 +14,15 @@ func NewRedisClient() *redis.Client {
 	return rdb
 }
 
+// Block: Header and Body
+type Block struct {
+	Header *types.Header
+	Body   *types.Body
+}
+
 // BlockData represents the structure of the block for serialization
 type BlockData struct {
-	Number            uint64   `json:"number"`
-	Hash              string   `json:"hash"`
-	TransactionHashes []string `json:"transaction_hashes"`
+	Block             Block
+	TransactionHashes map[string]*types.Transaction
+	Events            map[string][]*types.Log
 }
