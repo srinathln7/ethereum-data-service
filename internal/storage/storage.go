@@ -12,6 +12,12 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+var (
+	BLOCK_PREFIX string = "block:"
+	TX_PREFIX    string = "tx:"
+	EVENT_PREFIX string = "event:"
+)
+
 func AddBlockDataToDB(ctx context.Context, rdb *redis.Client, payload []byte, expiryTime time.Duration) error {
 
 	var blockData model.Data
@@ -23,19 +29,18 @@ func AddBlockDataToDB(ctx context.Context, rdb *redis.Client, payload []byte, ex
 	}
 
 	// Index the block by its number for quick retrieval
-	blockKey := fmt.Sprintf("block:%d", blockData.Block.Header.Number)
+	blockKey := fmt.Sprint(BLOCK_PREFIX, blockData.Block.Header.Number)
 	blockDataJSON, err := json.Marshal(blockData.Block)
 	if err != nil {
 		return err
 	}
-
 	if err := rdb.Set(ctx, blockKey, blockDataJSON, expiryTime).Err(); err != nil {
 		return err
 	}
 
 	// Index transactions and events with block's expiry
 	for txHash, tx := range blockData.TransactionHashes {
-		txKey := fmt.Sprintf("tx:%s", txHash)
+		txKey := fmt.Sprint(TX_PREFIX, txHash)
 		txJSON, err := json.Marshal(tx)
 		if err != nil {
 			return err
@@ -52,7 +57,8 @@ func AddBlockDataToDB(ctx context.Context, rdb *redis.Client, payload []byte, ex
 			if err != nil {
 				return err
 			}
-			addressKey := fmt.Sprintf("events:%s", event.Address)
+			// For ex: `events:0x6000da47483062A0D734Ba3dc7576Ce6A0B645C4_0` represents an event of the underlying address
+			addressKey := fmt.Sprint(EVENT_PREFIX, event.Address, "_", event.TxIndex)
 			if err := rdb.Set(ctx, addressKey, eventJSON, expiryTime).Err(); err != nil {
 				return err
 			}
@@ -67,14 +73,33 @@ func AddBlockDataToDB(ctx context.Context, rdb *redis.Client, payload []byte, ex
 // It takes a Redis client and an address as input, fetches the stored event data, and unmarshals it into a slice of Ethereum log events.
 // Returns a slice of logs or an error if any operation fails.
 func GetEventsByAddress(rdb *redis.Client, address string) ([]*types.Log, error) {
-	data, err := rdb.Get(context.Background(), "events:"+address).Result()
+
+	// Use the Redis wild card pattern
+	keyPattern := fmt.Sprint(EVENT_PREFIX, address, "_*")
+
+	ctx := context.Background()
+
+	// Get all keys matching the pattern from Redis
+	keys, err := rdb.Keys(ctx, keyPattern).Result()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error fetching keys from Redis: %v", err)
 	}
 
-	var events []*types.Log
-	if err := json.Unmarshal([]byte(data), &events); err != nil {
-		return nil, err
+	events := make([]*types.Log, len(keys))
+
+	// Iterate through keys and retrieve events
+	for idx, key := range keys {
+		eventJSON, err := rdb.Get(ctx, key).Result()
+		if err != nil {
+			return nil, fmt.Errorf("error fetching event from Redis: %v", err)
+		}
+
+		var event types.Log
+		if err := json.Unmarshal([]byte(eventJSON), &event); err != nil {
+			return nil, fmt.Errorf("error unmarshalling event JSON: %v", err)
+		}
+
+		events[idx] = &event
 	}
 
 	return events, nil
@@ -84,7 +109,7 @@ func GetEventsByAddress(rdb *redis.Client, address string) ([]*types.Log, error)
 // It takes a Redis client and a block number as input, fetches the stored block data, and unmarshals it into a Block struct.
 // Returns a pointer to the Block struct or an error if any operation fails.
 func GetBlockByNumber(rdb *redis.Client, blockNumber string) (*model.Block, error) {
-	data, err := rdb.Get(context.Background(), "block:"+blockNumber).Result()
+	data, err := rdb.Get(context.Background(), BLOCK_PREFIX+blockNumber).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +126,7 @@ func GetBlockByNumber(rdb *redis.Client, blockNumber string) (*model.Block, erro
 // It takes a Redis client and a transaction hash as input, fetches the stored transaction data, and unmarshals it into a Transaction struct.
 // Returns a pointer to the Transaction struct or an error if any operation fails.
 func GetTransactionByHash(rdb *redis.Client, txHash string) (*types.Transaction, error) {
-	data, err := rdb.Get(context.Background(), "tx:"+txHash).Result()
+	data, err := rdb.Get(context.Background(), TX_PREFIX+txHash).Result()
 	if err != nil {
 		return nil, err
 	}
