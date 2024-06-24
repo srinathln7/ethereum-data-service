@@ -16,6 +16,8 @@ type Config struct {
 	REDIS_ADDR            string
 	REDIS_PUBSUB_CH       string
 	REDIS_KEY_EXPIRY_TIME time.Duration
+
+	NUM_BLOCKS_TO_SYNC int
 }
 
 func LoadConfig() (*Config, error) {
@@ -23,6 +25,7 @@ func LoadConfig() (*Config, error) {
 		"API_PORT",
 		"ETHEREUM_HTTPS_URL", "ETHEREUM_WSS_URL",
 		"REDIS_ADDR", "REDIS_DB", "REDIS_PUBSUB_CH", "REDIS_KEY_EXPIRY_TIME",
+		"NUM_BLOCKS_TO_SYNC",
 	}
 
 	envMap, err := util.GetEnvMap(requiredKeys)
@@ -40,6 +43,11 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 
+	syncNum, err := strconv.Atoi(envMap["NUM_BLOCKS_TO_SYNC"])
+	if err != nil {
+		return nil, err
+	}
+
 	return &Config{
 		API_PORT: envMap["API_PORT"],
 
@@ -50,5 +58,7 @@ func LoadConfig() (*Config, error) {
 		REDIS_KEY_EXPIRY_TIME: time.Duration(expiryTime) * time.Second,
 		REDIS_ADDR:            envMap["REDIS_ADDR"],
 		REDIS_PUBSUB_CH:       envMap["REDIS_PUBSUB_CH"],
+
+		NUM_BLOCKS_TO_SYNC: syncNum,
 	}, nil
 }
