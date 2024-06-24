@@ -19,7 +19,6 @@ var (
 )
 
 func AddBlockDataToDB(ctx context.Context, rdb *redis.Client, payload []byte, expiryTime time.Duration) error {
-
 	var blockData model.Data
 
 	// Deserialize the block data
@@ -28,44 +27,68 @@ func AddBlockDataToDB(ctx context.Context, rdb *redis.Client, payload []byte, ex
 		return err
 	}
 
-	// Index the block by its number for quick retrieval
-	blockKey := fmt.Sprint(BLOCK_PREFIX, blockData.Block.Header.Number)
-	blockDataJSON, err := json.Marshal(blockData.Block)
-	if err != nil {
-		return err
-	}
-	if err := rdb.Set(ctx, blockKey, blockDataJSON, expiryTime).Err(); err != nil {
+	// Index the block by its number
+	if err := IndexBlock(ctx, rdb, &blockData, expiryTime); err != nil {
 		return err
 	}
 
-	// Index transactions and events with block's expiry
+	// Index transactions
+	if err := IndexTransactions(ctx, rdb, &blockData, expiryTime); err != nil {
+		return err
+	}
+
+	// Index events by address and transaction index
+	if err := IndexEvents(ctx, rdb, &blockData, expiryTime); err != nil {
+		return err
+	}
+
+	log.Printf("Stored block %d in Redis\n", blockData.Block.Header.Number)
+	return nil
+}
+
+// IndexBlock: indexes the block data by its block number in Redis.
+func IndexBlock(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error {
+	blockKey := fmt.Sprint(BLOCK_PREFIX, blockData.Block.Header.Number)
+	blockDataJSON, err := json.Marshal(blockData.Block)
+	if err != nil {
+		return fmt.Errorf("error marshalling block data: %v", err)
+	}
+	if err := rdb.Set(ctx, blockKey, blockDataJSON, expiryTime).Err(); err != nil {
+		return fmt.Errorf("error storing block data in Redis: %v", err)
+	}
+	return nil
+}
+
+// IndexTransactions: indexes each transaction data against its hash in Redis.
+func IndexTransactions(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error {
 	for txHash, tx := range blockData.TransactionHashes {
 		txKey := fmt.Sprint(TX_PREFIX, txHash)
 		txJSON, err := json.Marshal(tx)
 		if err != nil {
-			return err
+			return fmt.Errorf("error marshalling transaction %s: %v", txHash, err)
 		}
 		if err := rdb.Set(ctx, txKey, txJSON, expiryTime).Err(); err != nil {
-			return err
+			return fmt.Errorf("error storing transaction %s in Redis: %v", txHash, err)
 		}
 	}
+	return nil
+}
 
-	// Index address to retrieve all events associated with the address
+// IndexEvents: indexes each event by its address in Redis.
+func IndexEvents(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error {
 	for _, events := range blockData.Events {
 		for _, event := range events {
 			eventJSON, err := json.Marshal(event)
 			if err != nil {
-				return err
+				return fmt.Errorf("error marshalling event %+v: %v", event, err)
 			}
-			// For ex: `events:0x6000da47483062A0D734Ba3dc7576Ce6A0B645C4_0` represents an event of the underlying address
+			// Example key: `event:0x6000da47483062A0D734Ba3dc7576Ce6A0B645C4_0`
 			addressKey := fmt.Sprint(EVENT_PREFIX, event.Address, "_", event.TxIndex)
 			if err := rdb.Set(ctx, addressKey, eventJSON, expiryTime).Err(); err != nil {
-				return err
+				return fmt.Errorf("error storing event %s_%d in Redis: %v", event.Address, event.TxIndex, err)
 			}
 		}
 	}
-
-	log.Printf("Stored block %d in Redis\n", blockData.Block.Header.Number)
 	return nil
 }
 
