@@ -8,100 +8,21 @@ TBD
 
 Your proposed project structure looks well-organized and modular, adhering to best practices in Go project organization. It provides a clear separation of concerns, which will make your codebase maintainable and scalable. Here's a brief overview of each component and why it's appropriate:
 
-### Project Structure Overview
 
-```ethereum-data-service/
-│
-├── cmd/
-│   └── server/
-│       └── main.go
-│
-├── internal/
-│   ├── api/
-│   │   └── handlers.go
-│   │
-│   ├── config/
-│   │   └── config.go
-│   │
-│   ├── models/
-│   │   ├── block.go
-│   │   ├── transaction.go
-│   │   └── event.go
-│   │
-│   ├── service/
-│   │   ├── block_service.go
-│   │   ├── transaction_service.go
-│   │   └── event_service.go
-│   │
-│   └── storage/
-│       ├── redis.go
-│       └── circular_queue.go
-│
-├── pkg/
-│   ├── logger/
-│   │   └── logger.go
-│   │
-│   └── utils/
-│       └── utils.go
-│
-├── Dockerfile
-├── docker-compose.yml
-├── go.mod
-├── go.sum
-└── README.md
+## Test
 
 ```
 
-### Detailed Breakdown
+# Get block info associated with a given block number 
+curl -X GET http://localhost:8080/block?block_number=20162001 | jq
 
-- **cmd/server/main.go**: Entry point for the application, responsible for initializing and starting the server.
-  
-- **internal/**: Contains application-specific code that isn't meant to be imported by other projects.
-  
-  - **api/**: Handles HTTP routes and middleware.
-    - `handlers.go`: Contains the HTTP handler functions.
-    
-  
-  - **blockchain/**: Interfaces with the Ethereum blockchain.
-    - `client.go`: Ethereum client setup and configuration.
-    - `subscriber.go`: Subscribes to new block events.
-    - `processor.go`: Processes block data, transactions, and events.
-  
-  - **config/**: Configuration handling.
-    - `config.go`: Loads and manages configuration settings.
-  
-  - **models/**: Defines data models.
-    - `block.go`: Block data model.
-    - `transaction.go`: Transaction data model.
-    - `event.go`: Event data model.
-  
-  - **storage/**: Interfaces with the data store.
-    - `redis.go`: Redis client setup and interactions.
-    - `circular_queue.go`: Implementation of the circular queue for storing blocks.
-  
-  - **service/**: Business logic and service layer.
-    - `block_service.go`: Business logic for handling block-related operations.
-    - `transaction_service.go`: Business logic for handling transaction-related operations.
-    - `event_service.go`: Business logic for handling event-related operations.
-  
-- **pkg/**: Contains utility packages that can be used across different projects.
-  - `logger.go`: Centralized logging functionality.
-  - `utils.go`: Utility functions.
-  
-- **scripts/**: Scripts for setup and maintenance.
-  - `setup.sh`: Script to set up the environment or dependencies.
-  
-- **tests/**: Contains unit and integration tests.
-  - `integration/api_test.go`: Integration tests for the API.
-  - `unit/blockchain_test.go`: Unit tests for blockchain interactions.
-  - `unit/storage_test.go`: Unit tests for storage interactions.
-  
-- **Dockerfile**: Defines the Docker image.
-- **docker-compose.yml**: Docker Compose file for setting up the application stack.
-- **go.mod**: Go module file.
-- **go.sum**: Go dependencies checksum file.
-- **README.md**: Documentation and instructions for the project.
+# Get Tx info associated with a given tc hash
+curl -X GET http://localhost:8080/tx?tx_hash=0xec9057951284893e709fd5e4d57f76f1013145f12d6e366664c060b6f2baf559 | jq
 
+# Get events associated with a particular address
+curl -X GET "http://localhost:8080/events?address=0x38AfDe1E098B0cA181E144A639339198c8CF3Efa" | jq
+
+```
 
 
 # References

@@ -10,17 +10,17 @@ import (
 
 // Block represents an Ethereum block, containing both header and body information.
 type Block struct {
-	Header *types.Header // Header contains metadata about the block.
-	Body   *types.Body   // Body contains the transactions and uncles of the block.
+	Header *types.Header `json:"header"` // Header contains metadata about the block.
+	Body   *types.Body   `json:"body"`   // Body contains the transactions and uncles of the block.
 }
 
 // Data represents storage data in Redis DB for Ethereum-related information.
 // It includes Ethereum block data, transaction hashes mapped to transactions,
 // and event data mapped to specific event addresses.
 type Data struct {
-	Block             Block                         // Block holds Ethereum block information.
-	TransactionHashes map[string]*types.Transaction // TransactionHashes maps transaction hashes to their corresponding transactions.
-	Events            map[string][]*types.Log       // Events maps event addresses to lists of event logs.
+	Block             Block                         `json:"block"`              // Block holds Ethereum block information.
+	TransactionHashes map[string]*types.Transaction `json:"transaction_hashes"` // TransactionHashes maps transaction hashes to their corresponding transactions.
+	Events            map[string][]*types.Log       `json:"events"`             // Events maps event addresses to lists of event logs.
 }
 
 // formatBlockData: Extracts the data from Ethereum Block and format the data
