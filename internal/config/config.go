@@ -3,18 +3,28 @@ package config
 import (
 	util "ethereum-data-service/pkg/util"
 	"strconv"
+	"time"
 )
 
 type Config struct {
-	Port          int
-	HTTPSURL      string
-	WSSURL        string
-	RedisAddr     string
-	RedisPubSubCh string
+	Port int
+
+	ETH_HTTPS_URL string
+	ETH_WSS_URL   string
+
+	REDIS_DB              int
+	REDIS_ADDR            string
+	REDIS_PUBSUB_CH       string
+	REDIS_KEY_EXPIRY_TIME time.Duration
 }
 
 func LoadConfig() (*Config, error) {
-	requiredKeys := []string{"PORT", "ETHEREUM_HTTPS_URL", "ETHEREUM_WSS_URL", "REDIS_ADDR", "REDIS_PUBSUB_CH"}
+	requiredKeys := []string{
+		"PORT",
+		"ETHEREUM_HTTPS_URL", "ETHEREUM_WSS_URL",
+		"REDIS_ADDR", "REDIS_DB", "REDIS_PUBSUB_CH", "REDIS_KEY_EXPIRY_TIME",
+	}
+
 	envMap, err := util.GetEnvMap(requiredKeys)
 	if err != nil {
 		return nil, err
@@ -25,11 +35,25 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 
+	rdb, err := strconv.Atoi(envMap["REDIS_DB"])
+	if err != nil {
+		return nil, err
+	}
+
+	expiryTime, err := strconv.Atoi(envMap["REDIS_KEY_EXPIRY_TIME"])
+	if err != nil {
+		return nil, err
+	}
+
 	return &Config{
-		Port:          port,
-		HTTPSURL:      envMap["ETHEREUM_HTTPS_URL"],
-		WSSURL:        envMap["ETHEREUM_WSS_URL"],
-		RedisAddr:     envMap["REDIS_ADDR"],
-		RedisPubSubCh: envMap["REDIS_PUBSUB_CH"],
+		Port: port,
+
+		ETH_HTTPS_URL: envMap["ETHEREUM_HTTPS_URL"],
+		ETH_WSS_URL:   envMap["ETHEREUM_WSS_URL"],
+
+		REDIS_DB:              rdb,
+		REDIS_KEY_EXPIRY_TIME: time.Duration(expiryTime) * time.Second,
+		REDIS_ADDR:            envMap["REDIS_ADDR"],
+		REDIS_PUBSUB_CH:       envMap["REDIS_PUBSUB_CH"],
 	}, nil
 }

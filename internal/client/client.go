@@ -10,18 +10,49 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func NewETHClient(protocol enum.Protocol) (*ethclient.Client, error) {
+type Client struct {
+	HTTPSETH *ethclient.Client
+	WSSETH   *ethclient.Client
+	Redis    *redis.Client
+}
+
+// InitClient initializes and returns all clients
+func InitClient() (*Client, error) {
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		return nil, err
 	}
 
+	httpsETHClient, err := newETHClient(cfg, enum.HTTPS)
+	if err != nil {
+		return nil, err
+	}
+
+	wssETHClient, err := newETHClient(cfg, enum.WSS)
+	if err != nil {
+		return nil, err
+	}
+
+	rdb, err := newRedisClient(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Client{
+		HTTPSETH: httpsETHClient,
+		WSSETH:   wssETHClient,
+		Redis:    rdb,
+	}, nil
+}
+
+// newETHClient initializes and returns a new ETH client as per the specified protocol
+func newETHClient(cfg *config.Config, protocol enum.Protocol) (*ethclient.Client, error) {
 	var rpcURL string
 	switch protocol {
 	case enum.HTTPS:
-		rpcURL = cfg.HTTPSURL
+		rpcURL = cfg.ETH_HTTPS_URL
 	case enum.WSS:
-		rpcURL = cfg.WSSURL
+		rpcURL = cfg.ETH_WSS_URL
 	default:
 		return nil, eth_err.ErrInvalidProtocol
 	}
@@ -35,17 +66,11 @@ func NewETHClient(protocol enum.Protocol) (*ethclient.Client, error) {
 	return client, nil
 }
 
-// NewRedisClient initializes and returns a new Redis client
-func NewRedisClient() (*redis.Client, error) {
-
-	cfg, err := config.LoadConfig()
-	if err != nil {
-		return nil, err
-	}
-
+// newRedisClient initializes and returns a new Redis client
+func newRedisClient(cfg *config.Config) (*redis.Client, error) {
 	rdb := redis.NewClient(&redis.Options{
-		Addr: cfg.RedisAddr, // Redis server address
-		DB:   0,             // Use default DB
+		Addr: cfg.REDIS_ADDR, // Redis server address
+		DB:   cfg.REDIS_DB,   // Use default DB
 	})
 
 	return rdb, nil
