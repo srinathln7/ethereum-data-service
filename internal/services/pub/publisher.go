@@ -15,7 +15,6 @@ import (
 // RunBlockNotifier: Listens for new incoming blocks from the Ethereum blockchain,
 // extracts and formats the block as per the required format, and then publishes it to the Redis channel.
 func RunBlockNotifier(client *client.Client, cfg *config.Config, shutdown chan struct{}) {
-	log.Println("Starting Block Notification Service")
 
 	ethClient, rdb := client.WSSETH, client.Redis
 

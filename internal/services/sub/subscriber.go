@@ -17,7 +17,7 @@ func RunBlockSubscriber(rdb *redis.Client, cfg *config.Config, shutdown chan str
 	// Handle OS signals for graceful shutdown
 	go handleGracefulShutdown(cancel, shutdown)
 
-	log.Printf("Subscribing to Redis channel: %s\n", cfg.REDIS_PUBSUB_CH)
+	log.Printf("Subscribed to Redis channel: %s\n", cfg.REDIS_PUBSUB_CH)
 
 	// Subscribe to the Redis channel
 	subscriber := rdb.Subscribe(ctx, cfg.REDIS_PUBSUB_CH)
@@ -35,7 +35,7 @@ func RunBlockSubscriber(rdb *redis.Client, cfg *config.Config, shutdown chan str
 		case msg := <-ch:
 			err := storage.AddBlockDataToDB(ctx, rdb, []byte(msg.Payload), cfg.REDIS_KEY_EXPIRY_TIME)
 			if err != nil {
-				log.Printf("Error adding block data to storage: %v\n", err)
+				log.Printf("error adding block data to storage: %v\n", err)
 			}
 		}
 	}
