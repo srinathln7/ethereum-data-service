@@ -6,18 +6,15 @@ import (
 	"ethereum-data-service/internal/config"
 	"ethereum-data-service/internal/model"
 	"log"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/redis/go-redis/v9"
 )
 
-// RunBlockNotificationService: Listens for new incoming blocks from the Ethereum blockchain,
+// RunBlockNotifier: Listens for new incoming blocks from the Ethereum blockchain,
 // extracts and formats the block as per the required format, and then publishes it to the Redis channel.
-func RunBlockNotifier(client *client.Client, cfg *config.Config) {
+func RunBlockNotifier(client *client.Client, cfg *config.Config, shutdown chan struct{}) {
 	log.Println("Starting Block Notification Service")
 
 	ethClient, rdb := client.WSSETH, client.Redis
@@ -26,16 +23,16 @@ func RunBlockNotifier(client *client.Client, cfg *config.Config) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	// Handle OS signals for graceful shutdown
-	go handleGracefulShutdown(ethClient, rdb, cancel)
+	go handleGracefulShutdown(cancel, shutdown)
 
 	log.Println("Listening for new blocks from the Ethereum Blockchain...")
-	err := listenForBlocks(ctx, ethClient, rdb, cfg)
+	err := listenForBlocks(ctx, ethClient, rdb, cfg, shutdown)
 	if err != nil {
-		log.Fatalf("error in block listener: %v", err)
+		log.Fatalf("Error in block listener: %v", err)
 	}
 }
 
-func listenForBlocks(ctx context.Context, ethClient *ethclient.Client, rdb *redis.Client, cfg *config.Config) error {
+func listenForBlocks(ctx context.Context, ethClient *ethclient.Client, rdb *redis.Client, cfg *config.Config, shutdown chan struct{}) error {
 	headers := make(chan *types.Header)
 	sub, err := ethClient.SubscribeNewHead(ctx, headers)
 	if err != nil {
@@ -48,10 +45,15 @@ func listenForBlocks(ctx context.Context, ethClient *ethclient.Client, rdb *redi
 		case err := <-sub.Err():
 			return err
 		case header := <-headers:
-			err := handleNewHeader(ctx, ethClient, rdb, cfg, header)
-			if err != nil {
-				// DONOT: return error here but continue the service
-				log.Printf("error handling new block header: %v", err)
+			select {
+			case <-shutdown:
+				log.Println("Shutting down BlockNotifier service...")
+				return nil
+			default:
+				err := handleNewHeader(ctx, ethClient, rdb, cfg, header)
+				if err != nil {
+					log.Printf("Error handling new block header: %v", err)
+				}
 			}
 		}
 	}
@@ -69,7 +71,7 @@ func handleNewHeader(ctx context.Context, ethClient *ethclient.Client, rdb *redi
 		return err
 	}
 
-	// Publish the formated blockdata to the redis channel
+	// Publish the formatted block data to the Redis channel
 	if err := rdb.Publish(ctx, cfg.REDIS_PUBSUB_CH, blockDataInBytes).Err(); err != nil {
 		return err
 	}
@@ -78,16 +80,7 @@ func handleNewHeader(ctx context.Context, ethClient *ethclient.Client, rdb *redi
 	return nil
 }
 
-func handleGracefulShutdown(ethClient *ethclient.Client, rdb *redis.Client, cancel context.CancelFunc) {
-	sigCh := make(chan os.Signal, 1)
-	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
-
-	// Wait for a termination signal
-	sig := <-sigCh
-	log.Printf("Received signal %v. Initating graceful shut down...", sig)
-
-	// Close all client connections and trigger cancellation of context
-	ethClient.Close()
-	rdb.Close()
+func handleGracefulShutdown(cancel context.CancelFunc, shutdown chan struct{}) {
+	<-shutdown
 	cancel()
 }
