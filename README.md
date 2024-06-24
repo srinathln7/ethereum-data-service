@@ -2,21 +2,7 @@
 
 ## Proposed Architecture
 
-```mermaid
-graph TD
-    A[Ethereum Node<br>WebSocket API]
-    B[Block Subscriber]
-    C[Block Processor]
-    D[Redis Circular Queue<br>Latest 50 Blocks]
-    E[API Service]
-    F[Clients]
-
-    A -->|WebSocket Subscription| B
-    B -->|New Block Notifications| C
-    C -->|Processed Block Data| D
-    D -->|Data Retrieval| E
-    E -->|HTTP Requests/Responses| F
-```
+TBD 
 
 ## Proposed Project Structure
 

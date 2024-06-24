@@ -1,44 +1,35 @@
 package config
 
 import (
-	eth_err "ethereum-data-service/pkg/err"
-	"os"
+	util "ethereum-data-service/pkg/util"
 	"strconv"
-
-	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	Port      int
-	RPCURL    string
-	WSSURL    string
-	RedisAddr string
+	Port          int
+	HTTPSURL      string
+	WSSURL        string
+	RedisAddr     string
+	RedisPubSubCh string
 }
 
 func LoadConfig() (*Config, error) {
-
-	// Load environment variables from .env file
-	if err := godotenv.Load(); err != nil {
-		// No .env file found, relying on system environment variables
-		return nil, eth_err.ErrEnvVarMissing
+	requiredKeys := []string{"PORT", "ETHEREUM_HTTPS_URL", "ETHEREUM_WSS_URL", "REDIS_ADDR", "REDIS_PUBSUB_CH"}
+	envMap, err := util.GetEnvMap(requiredKeys)
+	if err != nil {
+		return nil, err
 	}
 
-	port, err := strconv.Atoi(getEnv("PORT", "8080"))
+	port, err := strconv.Atoi(envMap["PORT"])
 	if err != nil {
 		return nil, err
 	}
 
 	return &Config{
-		Port:      port,
-		RPCURL:    getEnv("ETHEREUM_RPC_URL", ""),
-		WSSURL:    getEnv("ETHEREUM_WSS_URL", ""),
-		RedisAddr: getEnv("REDIS_ADDR", "localhost:6379"),
+		Port:          port,
+		HTTPSURL:      envMap["ETHEREUM_HTTPS_URL"],
+		WSSURL:        envMap["ETHEREUM_WSS_URL"],
+		RedisAddr:     envMap["REDIS_ADDR"],
+		RedisPubSubCh: envMap["REDIS_PUBSUB_CH"],
 	}, nil
-}
-
-func getEnv(key, fallback string) string {
-	if value, exists := os.LookupEnv(key); exists {
-		return value
-	}
-	return fallback
 }
