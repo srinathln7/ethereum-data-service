@@ -11,9 +11,9 @@ import (
 )
 
 type Client struct {
-	HTTPSETH *ethclient.Client
-	WSSETH   *ethclient.Client
-	Redis    *redis.Client
+	ETH_HTTPS *ethclient.Client
+	ETH_WSS   *ethclient.Client
+	REDIS     *redis.Client
 }
 
 // InitClient initializes and returns all clients
@@ -39,9 +39,9 @@ func InitClient() (*Client, error) {
 	}
 
 	return &Client{
-		HTTPSETH: httpsETHClient,
-		WSSETH:   wssETHClient,
-		Redis:    rdb,
+		ETH_HTTPS: httpsETHClient,
+		ETH_WSS:   wssETHClient,
+		REDIS:     rdb,
 	}, nil
 }
 
