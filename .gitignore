@@ -1,14 +1,6 @@
-# Ignore binaries
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-*.test
-*.out
+# Ignore all executable files without extensions
+*[!./]/
 
-# Ignore directories named "bin" (common name for binary output directory)
-bin/
 
 # Project specific
 .env
