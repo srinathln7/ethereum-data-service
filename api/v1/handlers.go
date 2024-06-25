@@ -12,12 +12,13 @@ import (
 func setupHandlers(router *gin.Engine, rdb *redis.Client) {
 
 	// Default home route
-	router.GET("/", listRoutes(router))
+	router.GET("/", listRoutes(router)) // VC-00
 
 	// Application specific
-	router.GET("/events", getEvents(rdb))
-	router.GET("/block", getBlock(rdb))
-	router.GET("/tx", getTransaction(rdb))
+	router.GET("/blocks", getAllBlocks(rdb)) // VC-01
+	router.GET("/events", getEvents(rdb))    // VC-02
+	router.GET("/block", getBlock(rdb))      // VC-03
+	router.GET("/tx", getTransaction(rdb))   // VC-04
 
 	// Handle favicon.ico request without logging
 	router.GET("/favicon.ico", handleFavicon)
@@ -51,6 +52,19 @@ func getEvents(rdb *redis.Client) gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, events)
+	}
+}
+
+// getAllBlocks handles the /blocks endpoint, retrieving all block numbers from Redis.
+func getAllBlocks(rdb *redis.Client) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		blocks, err := storage.GetAllBlockNumbers(rdb)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get all blocks from Redis", "details": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, blocks)
 	}
 }
 

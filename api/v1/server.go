@@ -5,7 +5,6 @@ import (
 	"ethereum-data-service/internal/config"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
@@ -43,7 +42,7 @@ func RunAPIServer(rdb *redis.Client, cfg *config.Config, shutdown <-chan struct{
 	log.Println("Shutting down API server...")
 
 	// Create a deadline to wait for server shutdown
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), cfg.DEFAULT_TIMEOUT)
 	defer cancel()
 
 	// Attempt a graceful server shutdown

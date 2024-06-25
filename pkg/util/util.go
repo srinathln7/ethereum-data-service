@@ -1,6 +1,7 @@
 package util
 
 import (
+	"context"
 	eth_err "ethereum-data-service/pkg/err"
 	"os"
 
@@ -24,4 +25,9 @@ func GetEnvMap(keys []string) (map[string]string, error) {
 	}
 
 	return envMap, nil
+}
+
+func HandleGracefulShutdown(cancel context.CancelFunc, shutdown chan struct{}) {
+	<-shutdown
+	cancel()
 }

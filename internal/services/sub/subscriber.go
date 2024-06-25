@@ -4,18 +4,19 @@ import (
 	"context"
 	"ethereum-data-service/internal/config"
 	"ethereum-data-service/internal/storage"
+	"ethereum-data-service/pkg/util"
 	"log"
 
 	"github.com/redis/go-redis/v9"
 )
 
-// RunBlockSubscriber: Subscribes to a Redis channel and stores incoming block data to storage.
-func RunBlockSubscriber(rdb *redis.Client, cfg *config.Config, shutdown chan struct{}) {
+// RunBlockSubscriberSvc: Subscribes to a Redis channel and stores incoming block data to storage.
+func RunBlockSubscriberSvc(rdb *redis.Client, cfg *config.Config, shutdown chan struct{}) {
 	// Create a common context instance
 	ctx, cancel := context.WithCancel(context.Background())
 
 	// Handle OS signals for graceful shutdown
-	go handleGracefulShutdown(cancel, shutdown)
+	go util.HandleGracefulShutdown(cancel, shutdown)
 
 	log.Printf("Subscribed to Redis channel: %s\n", cfg.REDIS_PUBSUB_CH)
 
@@ -39,9 +40,4 @@ func RunBlockSubscriber(rdb *redis.Client, cfg *config.Config, shutdown chan str
 			}
 		}
 	}
-}
-
-func handleGracefulShutdown(cancel context.CancelFunc, shutdown chan struct{}) {
-	<-shutdown
-	cancel()
 }
