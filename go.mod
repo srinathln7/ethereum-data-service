@@ -49,7 +49,6 @@ require (
 	github.com/ethereum/c-kzg-4844 v1.0.0 // indirect
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-ole/go-ole v1.3.0 // indirect
-	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/holiman/uint256 v1.2.4 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
