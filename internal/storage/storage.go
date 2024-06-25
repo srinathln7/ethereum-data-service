@@ -82,8 +82,9 @@ func IndexEvents(ctx context.Context, rdb *redis.Client, blockData *model.Data, 
 			if err != nil {
 				return fmt.Errorf("error marshalling event %+v: %v", event, err)
 			}
-			// Example key: `event:0x6000da47483062A0D734Ba3dc7576Ce6A0B645C4_0`
-			addressKey := fmt.Sprint(EVENT_PREFIX, event.Address, "_", event.TxIndex)
+			// For ex key:`event:0x6000da47483062A0D734Ba3dc7576Ce6A0B645C4_20167294_234`
+			// refers to an event_address_blocknumber_eventIdx format
+			addressKey := fmt.Sprint(EVENT_PREFIX, event.Address, "_", event.BlockNumber, event.Index)
 			if err := rdb.Set(ctx, addressKey, eventJSON, expiryTime).Err(); err != nil {
 				return fmt.Errorf("error storing event %s_%d in Redis: %v", event.Address, event.TxIndex, err)
 			}

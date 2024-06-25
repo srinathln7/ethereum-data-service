@@ -23,7 +23,7 @@ type Data struct {
 	Events            map[string][]*types.Log       `json:"events"`             // Events maps event addresses to lists of event logs.
 }
 
-// formatBlockData: Extracts the data from Ethereum Block and format the data
+// FormatBlockData: Extracts the data from Ethereum Block and format the data
 // as per model.Data and then marshalls the result into bytes.
 func FormatBlockData(client *ethclient.Client, block *types.Block) ([]byte, error) {
 
@@ -42,11 +42,10 @@ func FormatBlockData(client *ethclient.Client, block *types.Block) ([]byte, erro
 		if err != nil {
 			return nil, err
 		}
-
-		blockData.Events[tx.Hash().Hex()] = receipt.Logs
+		blockData.Events[receipt.ContractAddress.Hex()] = receipt.Logs
 	}
 
-	// Marshal BlockData to JSON
+	// Marshal BlockData to bytes
 	blockDataJSON, err := json.Marshal(blockData)
 	if err != nil {
 		return nil, err
