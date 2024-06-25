@@ -20,7 +20,7 @@ type Block struct {
 type Data struct {
 	Block             Block                         `json:"block"`              // Block holds Ethereum block information.
 	TransactionHashes map[string]*types.Transaction `json:"transaction_hashes"` // TransactionHashes maps transaction hashes to their corresponding transactions.
-	Events            map[string][]*types.Log       `json:"events"`             // Events maps event addresses to lists of event logs.
+	Events            map[string][]*types.Log       `json:"events"`             // Events maps from each transaction hashes to lists of event logs.
 }
 
 // FormatBlockData: Extracts the data from Ethereum Block and format the data
@@ -42,7 +42,9 @@ func FormatBlockData(client *ethclient.Client, block *types.Block) ([]byte, erro
 		if err != nil {
 			return nil, err
 		}
-		blockData.Events[receipt.ContractAddress.Hex()] = receipt.Logs
+
+		// Store all events related to a particular transaction
+		blockData.Events[receipt.TxHash.Hex()] = receipt.Logs
 	}
 
 	// Marshal BlockData to bytes
