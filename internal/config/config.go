@@ -7,7 +7,8 @@ import (
 )
 
 type Config struct {
-	API_PORT string
+	API_PORT        string
+	API_STATIC_FILE string
 
 	ETH_HTTPS_URL string
 	ETH_WSS_URL   string
@@ -22,7 +23,7 @@ type Config struct {
 
 func LoadConfig() (*Config, error) {
 	requiredKeys := []string{
-		"API_PORT",
+		"API_PORT", "API_STATIC_FILE",
 		"ETHEREUM_HTTPS_URL", "ETHEREUM_WSS_URL",
 		"REDIS_ADDR", "REDIS_DB", "REDIS_PUBSUB_CH", "REDIS_KEY_EXPIRY_TIME",
 		"NUM_BLOCKS_TO_SYNC",
@@ -49,7 +50,8 @@ func LoadConfig() (*Config, error) {
 	}
 
 	return &Config{
-		API_PORT: envMap["API_PORT"],
+		API_PORT:        envMap["API_PORT"],
+		API_STATIC_FILE: envMap["API_STATIC_FILE"],
 
 		ETH_HTTPS_URL: envMap["ETHEREUM_HTTPS_URL"],
 		ETH_WSS_URL:   envMap["ETHEREUM_WSS_URL"],
