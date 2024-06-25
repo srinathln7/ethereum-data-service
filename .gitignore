@@ -1,6 +1,8 @@
 # Ignore all executable files without extensions
 *[!./]/
 
+# Ignore vc binary
+vc/ 
 
 # Project specific
 .env

@@ -41,6 +41,11 @@ func main() {
 		}
 	}
 
+	//  Execute the Cobra commands otherwise
+	if err := cmd.RootCmd.Execute(); err != nil {
+		log.Fatal("error:", err)
+	}
+
 	// Handle graceful shutdown
 	cmd.HandleShutdown(&wg, sigCh, shutdown)
 }
