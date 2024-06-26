@@ -8,7 +8,7 @@
 
 ## Proposed Architecture
 
-TBD 
+Refer [here](https://github.com/srinathln7/ethereum-data-service/blob/main/DESIGN.md) for the design and high-level explanation of the overall flow. 
 
 ##  Project Structure
 
@@ -17,10 +17,18 @@ Refer [here](https://github.com/srinathln7/ethereum-data-service/blob/main/CHALL
 
 ## Get Started
 
-To build and start all the required services run
+To build and start all the required services - rename `sample.env` file to `.env` and run
 
 ```
 make buildup
+```
+
+To stop running all services, run 
+
+```
+
+make builddown
+
 ```
 
 To view logs real-time for every service 
