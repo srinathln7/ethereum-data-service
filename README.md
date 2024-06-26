@@ -1,5 +1,25 @@
 # Ethereum Data Service
 
+## Pre-requesties
+* Go
+* Redis 
+
+
+## Install
+
+```
+
+# Docker 
+docker pull redis
+docker run -d --name vc-redis -p 6379:6379 redis
+
+# In case Redis is running locally
+sudo systemctl stop redis
+
+docker start vc-redis
+
+```
+
 ## Proposed Architecture
 
 TBD 
@@ -14,10 +34,8 @@ TBD
 # VC-00: - List all routes 
 curl -X GET http://localhost:8080/ | jq 
 
-
 # VC-01: List all block numbers currently available in local data store
 curl -X GET http://localhost:8080/blocks | jq
-
 
 # VC-02: Get block info associated with a given block number 
 curl -X GET http://localhost:8080/block?block_number=20162001 | jq

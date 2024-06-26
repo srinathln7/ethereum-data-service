@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis
+    container_name: vc-redis
+    ports:
+      - "6379:6379"
+
+  api-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vc-api-server
+    command: ["./vc", "api-server"]
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    environment:
+      - REDIS_ADDR=redis:6379  # Override the REDIS_ADDR environment variable
+
+  bootstrap:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vc-bootstrapper
+    command: ["./vc", "bootstrap"]
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    environment:
+      - REDIS_ADDR=redis:6379  # Override the REDIS_ADDR environment variable
+
+  sub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vc-blocksubscriber
+    command: ["./vc", "sub"]
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    environment:
+      - REDIS_ADDR=redis:6379  # Override the REDIS_ADDR environment variable
+  
+  pub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vc-blocknotifier
+    command: ["./vc", "pub"]
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    environment:
+      - REDIS_ADDR=redis:6379  # Override the REDIS_ADDR environment variable
+   
+  
