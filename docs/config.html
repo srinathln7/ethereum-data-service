@@ -1,0 +1,237 @@
+using module mode; GOMOD=/home/srinathln7/go/src/github.com/srinathLN7/ethereum-data-service/go.mod
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>config - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.18.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/pkg/">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/pkg/">GoDoc</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package config
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "ethereum-data-service/internal/config"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="#Config">type Config</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LoadConfig">func LoadConfig() (*Config, error)</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/ethereum-data-service/internal/config/config.go">config.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+		
+		
+			
+			
+			<h2 id="Config">type <a href="/src/ethereum-data-service/internal/config/config.go?s=86:1455#L1">Config</a>
+				<a class="permalink" href="#Config">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type Config struct {
+<span id="Config.DEFAULT_TIMEOUT"></span>    <span class="comment">// DEFAULT_TIMEOUT is the default timeout (seconds) duration for network requests.</span>
+    DEFAULT_TIMEOUT <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>
+
+<span id="Config.API_PORT"></span>    <span class="comment">// API_PORT is the port on which the API server will listen.</span>
+    API_PORT <a href="/pkg/builtin/#string">string</a>
+<span id="Config.API_STATIC_FILE"></span>    <span class="comment">// API_STATIC_FILE is the path to static files served by the API server.</span>
+    API_STATIC_FILE <a href="/pkg/builtin/#string">string</a>
+
+<span id="Config.ETH_HTTPS_URL"></span>    <span class="comment">// ETH_HTTPS_URL is the HTTPS URL for accessing the Ethereum network.</span>
+    ETH_HTTPS_URL <a href="/pkg/builtin/#string">string</a>
+<span id="Config.ETH_WSS_URL"></span>    <span class="comment">// ETH_WSS_URL is the WebSocket URL for accessing the Ethereum network.</span>
+    ETH_WSS_URL <a href="/pkg/builtin/#string">string</a>
+<span id="Config.ETH_AVG_BLOCK_TIME"></span>    <span class="comment">// ETH_AVG_BLOCK_TIME is the average time duration (seconds) between Ethereum blocks.</span>
+    ETH_AVG_BLOCK_TIME <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>
+
+<span id="Config.REDIS_DB"></span>    <span class="comment">// REDIS_DB is the Redis database number to use.</span>
+    REDIS_DB <a href="/pkg/builtin/#int">int</a>
+<span id="Config.REDIS_ADDR"></span>    <span class="comment">// REDIS_ADDR is the address of the Redis server.</span>
+    REDIS_ADDR <a href="/pkg/builtin/#string">string</a>
+<span id="Config.REDIS_PUBSUB_CH"></span>    <span class="comment">// REDIS_PUBSUB_CH is the Redis Pub/Sub channel name for messaging.</span>
+    REDIS_PUBSUB_CH <a href="/pkg/builtin/#string">string</a>
+<span id="Config.REDIS_KEY_EXPIRY_TIME"></span>    <span class="comment">// REDIS_KEY_EXPIRY_TIME is the default expiration time (seconds) for keys stored in Redis.</span>
+    REDIS_KEY_EXPIRY_TIME <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>
+
+<span id="Config.NUM_BLOCKS_TO_SYNC"></span>    <span class="comment">// NUM_BLOCKS_TO_SYNC is the number of recent blocks to sync during initialization.</span>
+    NUM_BLOCKS_TO_SYNC <a href="/pkg/builtin/#int">int</a>
+    <span class="comment">// BOOTSTRAP_TIME_OUT is the time (minute) after the bootstrap service exits itself gracefully.</span>
+    <span class="comment">// On an avg, to fetch the most recent 50 blocks and load it to Redis, it takes approximately 6 mins.</span>
+    <span class="comment">// We set it to 10 mins for safety marigin.</span>
+<span id="Config.BOOTSTRAP_TIMEOUT"></span>    BOOTSTRAP_TIMEOUT <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="LoadConfig">func <a href="/src/ethereum-data-service/internal/config/config.go?s=1457:1491#L32">LoadConfig</a>
+					<a class="permalink" href="#LoadConfig">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func LoadConfig() (*<a href="#Config">Config</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.18.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

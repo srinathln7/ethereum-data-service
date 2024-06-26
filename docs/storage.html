@@ -1,0 +1,338 @@
+using module mode; GOMOD=/home/srinathln7/go/src/github.com/srinathLN7/ethereum-data-service/go.mod
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>storage - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="/lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.18.1";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="/pkg/">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/pkg/">GoDoc</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package storage
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "ethereum-data-service/internal/storage"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#AddBlockDataToDB">func AddBlockDataToDB(ctx context.Context, rdb *redis.Client, payload []byte, expiryTime time.Duration) error</a></dd>
+			
+				
+				<dd><a href="#GetAllBlockNumbers">func GetAllBlockNumbers(rdb *redis.Client) ([]string, error)</a></dd>
+			
+				
+				<dd><a href="#GetBlockByNumber">func GetBlockByNumber(rdb *redis.Client, blockNumber string) (*model.Block, error)</a></dd>
+			
+				
+				<dd><a href="#GetEventsByAddress">func GetEventsByAddress(rdb *redis.Client, address string) ([]*types.Log, error)</a></dd>
+			
+				
+				<dd><a href="#GetTransactionByHash">func GetTransactionByHash(rdb *redis.Client, txHash string) (*types.Transaction, error)</a></dd>
+			
+				
+				<dd><a href="#IndexBlock">func IndexBlock(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
+			
+				
+				<dd><a href="#IndexEvents">func IndexEvents(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
+			
+				
+				<dd><a href="#IndexTransactions">func IndexTransactions(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
+			
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/ethereum-data-service/internal/storage/index.go">index.go</a>
+			
+				<a href="/src/ethereum-data-service/internal/storage/queries.go">queries.go</a>
+			
+				<a href="/src/ethereum-data-service/internal/storage/storage.go">storage.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				
+				<pre>var (
+    <span id="BLOCK_PREFIX">BLOCK_PREFIX</span> <a href="/pkg/builtin/#string">string</a> = &#34;block:&#34;
+    <span id="TX_PREFIX">TX_PREFIX</span>    <a href="/pkg/builtin/#string">string</a> = &#34;tx:&#34;
+    <span id="EVENT_PREFIX">EVENT_PREFIX</span> <a href="/pkg/builtin/#string">string</a> = &#34;event:&#34;
+)</pre>
+			
+		
+		
+			
+			
+			<h2 id="AddBlockDataToDB">func <a href="/src/ethereum-data-service/internal/storage/storage.go?s=247:356#L9">AddBlockDataToDB</a>
+				<a class="permalink" href="#AddBlockDataToDB">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func AddBlockDataToDB(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, payload []<a href="/pkg/builtin/#byte">byte</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			
+			
+			
+
+		
+			
+			
+			<h2 id="GetAllBlockNumbers">func <a href="/src/ethereum-data-service/internal/storage/queries.go?s=2918:2978#L77">GetAllBlockNumbers</a>
+				<a class="permalink" href="#GetAllBlockNumbers">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func GetAllBlockNumbers(rdb *redis.<a href="#Client">Client</a>) ([]<a href="/pkg/builtin/#string">string</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+GetAllBlockNumbers: Retrieves all block numbers stored in Redis.
+It takes a Redis client as input, constructs a Redis key pattern to fetch all block numbers,
+and retrieves all keys matching the pattern from Redis.
+Returns a slice of strings representing block numbers or an error if any operation fails.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetBlockByNumber">func <a href="/src/ethereum-data-service/internal/storage/queries.go?s=1627:1709#L42">GetBlockByNumber</a>
+				<a class="permalink" href="#GetBlockByNumber">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func GetBlockByNumber(rdb *redis.<a href="#Client">Client</a>, blockNumber <a href="/pkg/builtin/#string">string</a>) (*<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Block">Block</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+GetBlockByNumber retrieves a specific Ethereum block by its number from Redis.
+It takes a Redis client and a block number as input, fetches the stored block data, and unmarshals it into a Block struct.
+Returns a pointer to the Block struct or an error if any operation fails.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetEventsByAddress">func <a href="/src/ethereum-data-service/internal/storage/queries.go?s=478:558#L6">GetEventsByAddress</a>
+				<a class="permalink" href="#GetEventsByAddress">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func GetEventsByAddress(rdb *redis.<a href="#Client">Client</a>, address <a href="/pkg/builtin/#string">string</a>) ([]*<a href="/pkg/github.com/ethereum/go-ethereum/core/types/">types</a>.<a href="/pkg/github.com/ethereum/go-ethereum/core/types/#Log">Log</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+GetEventsByAddress retrieves all events related to a specific Ethereum address from Redis.
+It takes a Redis client and an address as input, fetches the stored event data, and unmarshals it into a slice of Ethereum log events.
+Returns a slice of logs or an error if any operation fails.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="GetTransactionByHash">func <a href="/src/ethereum-data-service/internal/storage/queries.go?s=2275:2362#L59">GetTransactionByHash</a>
+				<a class="permalink" href="#GetTransactionByHash">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func GetTransactionByHash(rdb *redis.<a href="#Client">Client</a>, txHash <a href="/pkg/builtin/#string">string</a>) (*<a href="/pkg/github.com/ethereum/go-ethereum/core/types/">types</a>.<a href="/pkg/github.com/ethereum/go-ethereum/core/types/#Transaction">Transaction</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+GetTransactionByHash retrieves a specific Ethereum transaction by its hash from Redis.
+It takes a Redis client and a transaction hash as input, fetches the stored transaction data, and unmarshals it into a Transaction struct.
+Returns a pointer to the Transaction struct or an error if any operation fails.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="IndexBlock">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=213:323#L4">IndexBlock</a>
+				<a class="permalink" href="#IndexBlock">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func IndexBlock(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+IndexBlock: indexes the block data by its block number in Redis.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="IndexEvents">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=1352:1463#L32">IndexEvents</a>
+				<a class="permalink" href="#IndexEvents">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func IndexEvents(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+IndexEvents: indexes each event by its address in Redis.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="IndexTransactions">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=773:890#L17">IndexTransactions</a>
+				<a class="permalink" href="#IndexTransactions">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func IndexTransactions(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+IndexTransactions: indexes each transaction data against its hash in Redis.
+</p>
+
+			
+			
+
+		
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.18.1.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

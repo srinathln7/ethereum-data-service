@@ -1,24 +1,10 @@
 # Ethereum Data Service
 
 ## Pre-requesties
-* Go
-* Redis 
-
-
-## Install
-
-```
-
-# Docker 
-docker pull redis
-docker run -d --name vc-redis -p 6379:6379 redis
-
-# In case Redis is running locally
-sudo systemctl stop redis
-
-docker start vc-redis
-
-```
+* [Go]((https://go.dev/doc/install)
+* [Redis](https://redis.io/) 
+* Docker (v20.10.21 or higher)
+* Docker Compose (v20.20.2 or higher)
 
 ## Proposed Architecture
 
@@ -26,7 +12,30 @@ TBD
 
 ##  Project Structure
 
-TBD
+Refer [here](https://github.com/srinathln7/ethereum-data-service/blob/main/CHALLENGE.md) for the challenge description and the project structure.
+
+
+## Get Started
+
+To build and start all the required services run
+
+```
+make buildup
+```
+
+To view logs real-time for every service 
+
+```
+docker logs -f vc-api-server
+
+docker logs -f vc-bootstrapper
+
+docker logs -f vc-blocknotifier
+
+docker logs -f vc-blocksubscriber
+
+```
+
 
 ## Test
 
@@ -53,4 +62,4 @@ curl -X GET "http://localhost:8080/events?address=0x38AfDe1E098B0cA181E144A63933
 
 * [Ethereum JSON-RPC Specification](https://ethereum.github.io/execution-apis/api-documentation/)
 
-
+* [Redis-Docs](https://redis.io/docs/latest/)
