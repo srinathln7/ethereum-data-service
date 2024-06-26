@@ -12,10 +12,10 @@ graph TD
     classDef redisDBStyle fill:#F6CF71,stroke:#333,stroke-width:1px,color:black;
     classDef apiServiceStyle fill:#B6D7A8,stroke:#333,stroke-width:1px,color:black;
     classDef clientsStyle fill:#B2B2B2,stroke:#333,stroke-width:1px,color:black;
-    
+
     subgraph VC-ETH-Data-Service
         direction TB
-        
+
         ethereumNode["Ethereum Node<br/>(WebSocket & HTTPS RPC)"]:::ethereumNodeStyle
         blockNotification["Block<br/>Notification"]:::blockNotificationStyle
         bootstrapper["Bootstrapper"]:::bootstrapperStyle
@@ -23,9 +23,10 @@ graph TD
         blockSubscriber["Block<br/>Subscriber"]:::blockSubscriberStyle
         dataFormatter["Data<br/>Formatter"]:::dataFormatterStyle
         redisDB[("Redis DB")]:::redisDBStyle
+        redisInsight("Redis Insight"):::redisDBStyle
         apiService["API Service"]:::apiServiceStyle
         clients["Clients"]:::clientsStyle
-        
+
         ethereumNode <--> |WebSocket| blockNotification
         bootstrapper -.-> |HTTPS<br/>Request| ethereumNode
         ethereumNode -.-> |HTTPS<br/>Response| bootstrapper
@@ -35,10 +36,10 @@ graph TD
         blockSubscriber --> |Processed<br/>Block Data| dataFormatter
         dataFormatter --> |Formatted<br/>Block Data| redisDB
         redisDB --> |Data<br/>Retrieval| apiService
+        redisDB --> |Analysis| redisInsight
         clients --> |HTTP<br/>Request| apiService
         apiService --> |HTTP<br/>Response| clients
     end
-
 ```
 
 ## Overall Flow of VC-Ethereum Data Service Architecture
@@ -80,6 +81,9 @@ The VC-Ethereum Data Service architecture facilitates the retrieval, processing,
 - **Role:** External consumers of Ethereum blockchain data.
 - **Flow:** Make HTTP requests to the API Service to fetch specific blockchain data of interest.
 
+**Redis Insight**
+- **Role** Analyzes and visualizes data stored in Redis DB, providing insights into key creation and memory consumption throughout the service operation. An alternative to `redis-cli`.
+- **Flow** Extracts data from Redis and displays the data through GUI.
 
 The `Data Formatter` component in this architecture is not a standalone service but rather a modular component that integrates into other services like the Bootstrapper and Block Subscriber. Its role is to ensure that all incoming block data, whether historical (from Bootstrapper) or real-time (from Block Subscriber), adheres to a consistent data format as specified in `model.Data` struct before being stored in Redis DB. This modular approach promotes code reusability and maintains data integrity across different parts of the Ethereum Data Service architecture. This module allows for efficient data processing, storage, and retrieval, ensuring that formatted blockchain data is readily available for consumption by API clients while maintaining consistency and reliability throughout the system.
 
