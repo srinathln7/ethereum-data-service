@@ -1,10 +1,10 @@
 # Ethereum Data Service
 
 ## Pre-requesties
-* [Go]((https://go.dev/doc/install)
+* [Go](https://go.dev/doc/install)
 * [Redis](https://redis.io/) 
-* Docker (v20.10.21 or higher)
-* Docker Compose (v20.20.2 or higher)
+* [Docker](https://docs.docker.com/engine/install/ubuntu/)(v20.10.21 or higher)
+* [Docker Compose](https://docs.docker.com/compose/install/linux/) (v20.20.2 or higher)
 
 ## Proposed Architecture
 
