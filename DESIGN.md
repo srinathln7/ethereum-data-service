@@ -1,8 +1,9 @@
 # VC-Ethereum Data Service Architecture
 
+The pivotal decision in our architecture aimed at storing information for the most recent 50 blocks centers around our database choice. Given the project's scope and requirements detailed [here](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/CHALLENGE.md), Redis was selected as our local store. The rationale behind this decision is thoroughly outlined [here](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/REDIS.md).
+
 ```mermaid
 graph TD
-
     classDef ethereumNodeStyle fill:#7FB3D5,stroke:#333,stroke-width:1px,color:white;
     classDef blockNotificationStyle fill:#96C7C0,stroke:#333,stroke-width:1px,color:white;
     classDef bootstrapperStyle fill:#FAC15E,stroke:#333,stroke-width:1px,color:white;
@@ -15,7 +16,6 @@ graph TD
 
     subgraph VC-ETH-Data-Service
         direction TB
-
         ethereumNode["Ethereum Node<br/>(WebSocket & HTTPS RPC)"]:::ethereumNodeStyle
         blockNotification["Block<br/>Notification"]:::blockNotificationStyle
         bootstrapper["Bootstrapper"]:::bootstrapperStyle
@@ -44,47 +44,49 @@ graph TD
 
 ## Overall Flow of VC-Ethereum Data Service Architecture
 
-The VC-Ethereum Data Service architecture facilitates the retrieval, processing, and distribution of Ethereum blockchain data through various components as follows
+The VC-Ethereum Data Service architecture streamlines the retrieval, processing, and distribution of Ethereum blockchain data through these components:
 
 **Ethereum Node**
-- **Role:** Acts as the primary interface to the Ethereum blockchain, providing both real-time updates via WebSocket and historical data (most recent 50 blocks) retrieval via HTTPS RPC.
+- **Role**: Primary interface to the Ethereum blockchain, providing real-time updates via WebSocket and historical data (most recent 50 blocks) via HTTPS RPC.
 
 **Bootstrapper**
-- **Role:** Fetches historical block data from the Ethereum Node using HTTPS RPC.
-- **Flow:** Sends an HTTPS request to the Ethereum Node to retrieve the latest 50 blocks for initial data synchronization.
+- **Role**: Retrieves historical block data from the Ethereum Node using HTTPS RPC.
+- **Flow**: Initiates an HTTPS request to fetch the latest 50 blocks for initial synchronization.
 
 **Block Notification**
-- **Role:** Listens for new blocks in real-time using WebSocket subscription from the Ethereum Node.
-- **Flow:** Establishes a bi-directional WebSocket connection with the Ethereum Node to receive immediate updates on new blocks.
+- **Role**: Listens for new blocks in real-time via WebSocket subscription from the Ethereum Node.
+- **Flow**: Establishes a bi-directional WebSocket connection to receive immediate updates on new blocks.
 
 **Redis Channel**
-- **Role:** Acts as an event-driven message broker for asynchronous communication.
-- **Flow:** Receives new block information from the Block Notification service and forwards it to downstream components.
+- **Role**: Event-driven message broker facilitating asynchronous communication.
+- **Flow**: Receives new block information from Block Notification and forwards it to downstream components.
 
 **Block Subscriber**
-- **Role:** Subscribes to the Redis Channel to process incoming block data.
-- **Flow:** Listens to the Redis Channel for new block updates, processes the data, and prepares it for further handling.
+- **Role**: Subscribes to the Redis Channel to process incoming block data.
+- **Flow**: Listens to the Redis Channel, processes block updates, and prepares data for further handling.
 
 **Data Formatter**
-- **Role:** A module that formats raw block data into a structured format according to predefined data models.
-- **Integration:** Importable into other services such as Bootstrapper and Block Subscriber to ensure consistency in data formatting before storage.
+- **Role**: Formats raw block data into a structured format using `model.Data` struct definitions.
+- **Integration**: Modular integration into Bootstrapper and Block Subscriber ensures consistent data formatting before storage.
 
 **Redis DB**
-- **Role:** Central storage for processed Ethereum blockchain data.
-- **Flow:** Stores formatted block data received from the Data Formatter and Block Subscriber for efficient data retrieval.
+- **Role**: Central storage for processed Ethereum blockchain data.
+- **Flow**: Stores formatted block data received from Data Formatter and Block Subscriber, enabling efficient data retrieval.
 
 **API Service**
-- **Role:** Provides an interface for external clients to query Ethereum blockchain data.
-- **Flow:** Receives HTTP requests from clients, retrieves requested data from Redis DB, and sends back HTTP responses containing the queried blockchain data.
+- **Role**: External interface for clients to query Ethereum blockchain data.
+- **Flow**: Receives HTTP requests, retrieves requested data from Redis DB, and returns HTTP responses containing queried blockchain data.
 
 **Clients**
-- **Role:** External consumers of Ethereum blockchain data.
-- **Flow:** Make HTTP requests to the API Service to fetch specific blockchain data of interest.
+- **Role**: External consumers accessing Ethereum blockchain data.
+- **Flow**: Initiates HTTP requests to API Service to fetch specific blockchain data of interest.
 
 **Redis Insight**
-- **Role** Analyzes and visualizes data stored in Redis DB, providing insights into key creation and memory consumption throughout the service operation. An alternative to `redis-cli`.
-- **Flow** Extracts data from Redis and displays the data through GUI.
+- **Role**: Analyzes and visualizes data stored in Redis DB, offering insights into key creation and memory usage.
+- **Flow**: Provides real-time GUI monitoring of Redis operations, complementing `redis-cli`.
 
-The `Data Formatter` component in this architecture is not a standalone service but rather a modular component that integrates into other services like the Bootstrapper and Block Subscriber. Its role is to ensure that all incoming block data, whether historical (from Bootstrapper) or real-time (from Block Subscriber), adheres to a consistent data format as specified in `model.Data` struct before being stored in Redis DB. This modular approach promotes code reusability and maintains data integrity across different parts of the Ethereum Data Service architecture. This module allows for efficient data processing, storage, and retrieval, ensuring that formatted blockchain data is readily available for consumption by API clients while maintaining consistency and reliability throughout the system.
+## Remark
 
-Overall, this design strives to efficiently combine real-time and historical Ethereum data processing, leveraging Redis for both message brokering and data storage. The API Service ensures that clients have quick and reliable access to the latest blockchain data. 
+The `Data Formatter` module integrates as a component rather than a standalone service, ensuring uniform data formatting across Bootstrapper and Block Subscriber. This approach maximizes code reuse and data integrity within the VC-Ethereum Data Service architecture.
+
+This architecture optimally combines real-time Ethereum data processing with historical data management at the time of starting the application, leveraging Redis for efficient message brokering and storage. The API Service guarantees fast, reliable access to current blockchain data for clients.
