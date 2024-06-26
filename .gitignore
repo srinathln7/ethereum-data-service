@@ -1,3 +1,6 @@
+# Ignore vc binary
+vc/ 
+
 # Project specific
 .env
 

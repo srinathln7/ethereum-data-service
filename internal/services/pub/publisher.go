@@ -13,7 +13,7 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-// RunBlockNotifierSvc: Listens for new incoming blocks from the Ethereum blockchain,
+// RunBlockNotifierSvc: Listens for new incoming blocks real-time from the Ethereum blockchain,
 // extracts and formats the block as per the required format, and then publishes it to the Redis channel.
 func RunBlockNotifierSvc(client *client.Client, cfg *config.Config, shutdown chan struct{}) {
 

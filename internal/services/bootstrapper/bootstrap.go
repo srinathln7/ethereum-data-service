@@ -7,6 +7,7 @@ import (
 	"ethereum-data-service/internal/model"
 	"ethereum-data-service/internal/storage"
 	"log"
+
 	"math/big"
 	"os"
 	"time"
