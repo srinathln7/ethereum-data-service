@@ -15,13 +15,19 @@ func setupHandlers(router *gin.Engine, rdb *redis.Client) {
 	router.GET("/", listRoutes(router)) // VC-00
 
 	// Application specific
-	router.GET("/blocks", getAllBlocks(rdb)) // VC-01
-	router.GET("/events", getEvents(rdb))    // VC-02
-	router.GET("/block", getBlock(rdb))      // VC-03
-	router.GET("/tx", getTransaction(rdb))   // VC-04
+	router.GET("/v1/blocks", getAllBlocks(rdb)) // VC-01
+	router.GET("/v1/events", getEvents(rdb))    // VC-02
+	router.GET("/v1/block", getBlock(rdb))      // VC-03
+	router.GET("/v1/tx", getTransaction(rdb))   // VC-04
 
 	// Handle favicon.ico request without logging
 	router.GET("/favicon.ico", handleFavicon)
+}
+
+// handleFavicon handles the favicon.ico request without logging.
+// Abort further processing to prevent logging
+func handleFavicon(c *gin.Context) {
+	c.Abort()
 }
 
 // listRoutes handles the root endpoint to list all registered routes.

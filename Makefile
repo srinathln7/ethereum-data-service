@@ -1,5 +1,5 @@
 # Paths and URLs for documentation
-DOC_PATH=${PWD}/docs
+DOC_PATH=${PWD}/docs/html
 DOC_URL=http://localhost:6060/pkg/ethereum-data-service/?m=all
 CLIENT_URL=http://localhost:6060/pkg/ethereum-data-service/internal/client/?m=all
 CONFIG_URL=http://localhost:6060/pkg/ethereum-data-service/internal/config/?m=all
