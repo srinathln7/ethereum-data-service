@@ -8,11 +8,11 @@
 
 ## Proposed Architecture
 
-Refer [here](https://github.com/srinathln7/ethereum-data-service/blob/main/DESIGN.md) for the design and high-level explanation of the overall flow. 
+Refer [here](https://github.com/srinathln7/ethereum-data-service/blob/main/DESIGN.md) for the overall design and high-level explanation of how various service, components, and modules interact with each other. 
 
 ##  Project Structure
 
-Refer [here](https://github.com/srinathln7/ethereum-data-service/blob/main/CHALLENGE.md) for the challenge description and the project structure.
+Refer [here](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/CHALLENGE.md) for the challenge description and the project structure.
 
 
 ## Get Started
