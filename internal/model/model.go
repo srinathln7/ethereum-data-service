@@ -45,6 +45,7 @@ func FormatBlockData(client *ethclient.Client, block *types.Block) ([]byte, erro
 
 		// Store all events related to a particular transaction
 		blockData.Events[receipt.TxHash.Hex()] = receipt.Logs
+
 	}
 
 	// Marshal BlockData to bytes

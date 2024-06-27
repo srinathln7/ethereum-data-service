@@ -23,7 +23,7 @@ This function stores block data, transactions, and events in Redis.
   4. Indexes the events by their addresses.
   5. Logs the successful storage of the block data.
 
-### IndexBlock
+### IdxBlockAndStore
 
 This function indexes block data by its block number in Redis.
 
@@ -38,7 +38,7 @@ This function indexes block data by its block number in Redis.
   2. Serializes the block data to JSON.
   3. Stores the serialized block data in Redis with the specified expiry time.
 
-### IndexTransactions
+### IdxTxAndStore
 
 This function indexes each transaction by its hash in Redis.
 
@@ -54,7 +54,7 @@ This function indexes each transaction by its hash in Redis.
   3. Serializes the transaction data to JSON.
   4. Stores the serialized transaction data in Redis with the specified expiry time.
 
-### IndexEvents
+### IdxEventsAndStore
 
 This function indexes each event by its address in Redis.
 

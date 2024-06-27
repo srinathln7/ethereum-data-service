@@ -130,13 +130,13 @@ using module mode; GOMOD=/home/srinathln7/go/src/github.com/srinathLN7/ethereum-
 				<dd><a href="#GetTransactionByHash">func GetTransactionByHash(rdb *redis.Client, txHash string) (*types.Transaction, error)</a></dd>
 			
 				
-				<dd><a href="#IndexBlock">func IndexBlock(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
+				<dd><a href="#IdxBlockAndStore">func IdxBlockAndStore(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
 			
 				
-				<dd><a href="#IndexEvents">func IndexEvents(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
+				<dd><a href="#IdxEventsAndStore">func IdxEventsAndStore(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
 			
 				
-				<dd><a href="#IndexTransactions">func IndexTransactions(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
+				<dd><a href="#IdxTxAndStore">func IdxTxAndStore(ctx context.Context, rdb *redis.Client, blockData *model.Data, expiryTime time.Duration) error</a></dd>
 			
 			
 			
@@ -265,14 +265,14 @@ Returns a pointer to the Transaction struct or an error if any operation fails.
 		
 			
 			
-			<h2 id="IndexBlock">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=213:323#L4">IndexBlock</a>
-				<a class="permalink" href="#IndexBlock">&#xb6;</a>
+			<h2 id="IdxBlockAndStore">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=230:346#L4">IdxBlockAndStore</a>
+				<a class="permalink" href="#IdxBlockAndStore">&#xb6;</a>
 				
 				
 			</h2>
-			<pre>func IndexBlock(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<pre>func IdxBlockAndStore(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
-IndexBlock: indexes the block data by its block number in Redis.
+IdxBlockAndStore: Indexes the block data by its block number and stores in Redis.
 </p>
 
 			
@@ -281,14 +281,14 @@ IndexBlock: indexes the block data by its block number in Redis.
 		
 			
 			
-			<h2 id="IndexEvents">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=1352:1463#L32">IndexEvents</a>
-				<a class="permalink" href="#IndexEvents">&#xb6;</a>
+			<h2 id="IdxEventsAndStore">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=1425:1542#L32">IdxEventsAndStore</a>
+				<a class="permalink" href="#IdxEventsAndStore">&#xb6;</a>
 				
 				
 			</h2>
-			<pre>func IndexEvents(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<pre>func IdxEventsAndStore(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
-IndexEvents: indexes each event by its address in Redis.
+IdxEventsAndStore: Indexes each event by its address, blocknumber, tx_hash, and tx_idx stores in Redis.
 </p>
 
 			
@@ -297,14 +297,14 @@ IndexEvents: indexes each event by its address in Redis.
 		
 			
 			
-			<h2 id="IndexTransactions">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=773:890#L17">IndexTransactions</a>
-				<a class="permalink" href="#IndexTransactions">&#xb6;</a>
+			<h2 id="IdxTxAndStore">func <a href="/src/ethereum-data-service/internal/storage/index.go?s=803:916#L17">IdxTxAndStore</a>
+				<a class="permalink" href="#IdxTxAndStore">&#xb6;</a>
 				
 				
 			</h2>
-			<pre>func IndexTransactions(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<pre>func IdxTxAndStore(ctx <a href="/pkg/context/">context</a>.<a href="/pkg/context/#Context">Context</a>, rdb *redis.<a href="#Client">Client</a>, blockData *<a href="/pkg/ethereum-data-service/internal/model/">model</a>.<a href="/pkg/ethereum-data-service/internal/model/#Data">Data</a>, expiryTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>) <a href="/pkg/builtin/#error">error</a></pre>
 			<p>
-IndexTransactions: indexes each transaction data against its hash in Redis.
+IdxTxAndStore: Indexes each transaction data against its hash and stores in Redis.
 </p>
 
 			

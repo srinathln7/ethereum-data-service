@@ -23,8 +23,8 @@ For a deeper dive into each service, refer to the README files in the respective
 - [Bootstrapper Service](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/services/bootstrapper)
 - [Block Notification Service](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/services/pub)
 - [Block Subscriber Service](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/services/sub)
-- [Data Formatter](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/model)
 - [Redis Storage](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/storage)
+- [Data Formatter](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/model)
 
 
 ## Get Started
@@ -90,9 +90,6 @@ curl -X GET "http://localhost:8080/v1/events?address=<$ADDR>" | jq
 
 Alternatively, you can test the service in your browser. 
 
-
-This will enable real-time monitoring of memory consumption and the number of keys generated in our local data store.
-
 ## Observation and Analysis
 
 To view real-time analytics of our local data store, click [here](http://localhost:5540) to navigate to the Redis Insight GUI. Then, manually connect the database by clicking `Add connection details manually` and using the following details 
@@ -103,7 +100,7 @@ host: redis
 port: 6379
 ```
 
-After continuously running the application for several hours, we monitored Redis using the Redis-Insight tool and observed that Redis peak memory consumption reached approximately 45MB. The number of indexed keys maintained averaged between 35,000 to 40,000, with Redis utilizing less than 1% of CPU resources. This performance is well within Redis's capabilities, as outlined in the official [Redis FAQ](https://redis.io/docs/latest/develop/get-started/faq/#:~:text=Redis%20can%20handle%20up%20to), which states Redis can manage up to 2^32 keys and has been tested to handle at least 250 million keys per instance.
+After continuously running the application for several hours, we monitored Redis using the Redis-Insight tool and observed that Redis peak memory consumption reached approximately 50MB. The number of indexed keys maintained averaged between 35,000 to 40,000, with Redis utilizing less than 1% of CPU resources. This performance is well within Redis's capabilities, as outlined in the official [Redis FAQ](https://redis.io/docs/latest/develop/get-started/faq/#:~:text=Redis%20can%20handle%20up%20to), which states Redis can manage up to 2^32 keys and has been tested to handle at least 250 million keys per instance.
 
 This validates that Redis is an optimal choice for our current project requirements.
 
@@ -124,9 +121,7 @@ To secure the API, I would implement the following measures:
 - **Authentication and Authorization:** Implement token-based authentication (e.g., JWT) and role-based access control (RBAC) to restrict access to the API.
   
 - **Rate Limiting:** Implement rate limiting to prevent abuse and protect the service from being overwhelmed by too many requests.
-  
-- **Input Validation:** Validate and sanitize all user input to prevent injection attacks and other security vulnerabilities.
-  
+    
 - **HTTPS:** Use HTTPS to encrypt communication between clients and the API.
 
 ### Performance Optimization
@@ -137,6 +132,8 @@ To improve the performance of the service, I would consider the following optimi
   
 - **Horizontal Scaling:** Scale the service horizontally by adding more instances behind the load balancer.
 
+
+### Design to store the entire ETH mainnet data
  
 
 ## References

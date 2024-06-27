@@ -25,18 +25,15 @@ func AddBlockDataToDB(ctx context.Context, rdb *redis.Client, payload []byte, ex
 		return err
 	}
 
-	// Index the block by its number
-	if err := IndexBlock(ctx, rdb, &blockData, expiryTime); err != nil {
+	if err := IdxBlockAndStore(ctx, rdb, &blockData, expiryTime); err != nil {
 		return err
 	}
 
-	// Index transactions
-	if err := IndexTransactions(ctx, rdb, &blockData, expiryTime); err != nil {
+	if err := IdxTxAndStore(ctx, rdb, &blockData, expiryTime); err != nil {
 		return err
 	}
 
-	// Index events by address and transaction index
-	if err := IndexEvents(ctx, rdb, &blockData, expiryTime); err != nil {
+	if err := IdxEventsAndStore(ctx, rdb, &blockData, expiryTime); err != nil {
 		return err
 	}
 

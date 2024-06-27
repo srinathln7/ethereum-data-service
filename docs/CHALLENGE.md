@@ -40,45 +40,55 @@ Please write a service which uses the Ethereum JSON-RPC API to store the followi
 ## Project structure
 
 ```
-.
 ├── api
 │   └── v1
 │       ├── handlers.go
-│       ├── middleware.go
+│       ├── README.md
 │       └── server.go
-├── CHALLENGE.md
 ├── cmd
-│   └── cmd.go
+│   ├── cmd.go
+│   └── README.md
+├── DESIGN.md
 ├── docker-compose.yml
 ├── Dockerfile
 ├── docs
-│   ├── bootstrap.html
-│   ├── client.html
-│   ├── config.html
-│   ├── index.html
-│   ├── model.html
-│   ├── pub.html
-│   ├── storage.html
-│   └── sub.html
+│   ├── CHALLENGE.md
+│   ├── html
+│   │   ├── bootstrap.html
+│   │   ├── client.html
+│   │   ├── config.html
+│   │   ├── index.html
+│   │   ├── model.html
+│   │   ├── pub.html
+│   │   ├── storage.html
+│   │   └── sub.html
+│   └── REDIS.md
 ├── go.mod
 ├── go.sum
 ├── internal
 │   ├── client
-│   │   └── client.go
+│   │   ├── client.go
+│   │   └── README.md
 │   ├── config
-│   │   └── config.go
+│   │   ├── config.go
+│   │   └── README.md
 │   ├── model
-│   │   └── model.go
+│   │   ├── model.go
+│   │   └── README.md
 │   ├── services
 │   │   ├── bootstrapper
-│   │   │   └── bootstrap.go
+│   │   │   ├── bootstrap.go
+│   │   │   └── README.md
 │   │   ├── pub
-│   │   │   └── publisher.go
+│   │   │   ├── publisher.go
+│   │   │   └── README.md
 │   │   └── sub
+│   │       ├── README.md
 │   │       └── subscriber.go
 │   └── storage
 │       ├── index.go
 │       ├── queries.go
+│       ├── README.md
 │       └── storage.go
 ├── LICENSE
 ├── main.go
@@ -88,12 +98,11 @@ Please write a service which uses the Ethereum JSON-RPC API to store the followi
 │   │   └── enum.go
 │   ├── err
 │   │   └── err.go
-│   ├── log
-│   │   └── logger.go
 │   └── util
 │       └── util.go
-└── README.md
+├── README.md
+└── sample.env
 
-18 directories, 34 files
+18 directories, 44 files
 
 ```
