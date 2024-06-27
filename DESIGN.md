@@ -53,12 +53,12 @@ The VC-Ethereum Data Service architecture streamlines the retrieval, processing,
 
 **Bootstrapper**
 - **Role**: Retrieves the most recent 50 block data from the Ethereum Node using HTTPS RPC.
-- **Flow**: Initiates an HTTPS request to fetch the latest 50 blocks for initial synchronization.
+- **Flow**: Initiates an HTTPS request to fetch the latest 50 blocks for initial synchronization, loads the data to Redis and then exits.
 - **Documentation**: For more details, please refer to the [bootstrapper README](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/services/bootstrapper).
 
 **Block Notification**
 - **Role**: Listens for new blocks in real-time via WebSocket subscription from the Ethereum Node.
-- **Flow**: Establishes a bi-directional WebSocket connection to receive immediate updates on new blocks.
+- **Flow**: Establishes a bi-directional WebSocket connection to receive live updates on new blocks.
 - **Documentation**: For more details, please refer to the [pub README](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/services/pub).
 
 **Redis Channel**
@@ -71,13 +71,13 @@ The VC-Ethereum Data Service architecture streamlines the retrieval, processing,
 - **Documentation**: For more details, please refer to the [sub README](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/services/sub).
 
 **Data Formatter**
-- **Role**: Formats raw block data into a structured format using `model.Data` struct definitions.
+- **Role**: Formats raw block data into a structured format as per `model.Data` struct definition.
 - **Integration**: Modular integration into Bootstrapper and Block Subscriber ensures consistent data formatting before storage.
 - **Documentation**: For more details, please refer to the [model README](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/model).
 
 **Redis DB**
 - **Role**: Central storage for processed Ethereum blockchain data.
-- **Flow**: Stores formatted block data received from Data Formatter and Block Subscriber, enabling efficient data retrieval.
+- **Flow**: Stores formatted block data received from upstream services with pre-define expiry time and enables efficient data retrieval.
 - **Documentation**: For more details, please refer to the [storage README](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/storage).
 
 **API Service**
@@ -90,15 +90,14 @@ The VC-Ethereum Data Service architecture streamlines the retrieval, processing,
 - **Flow**: Initiates HTTP requests to API Service to fetch specific blockchain data of interest.
 
 **Redis Insight**
-- **Role**: Analyzes and visualizes data stored in Redis DB, offering insights into key creation and memory usage.
+- **Role**: Analyzes and visualizes data stored in Redis DB, offering insights into key creation, memory consumption and CPU usage.
 - **Flow**: Provides real-time GUI monitoring of Redis operations, complementing `redis-cli`.
-
 
 ## Remarks
 
 ### TTL for Blockdata in Redis
 
-In the design, we start the **Bootstrapper** and **BlockNotification** services simultaneously. The Bootstrapper fetches the latest block height (`h`), retrieves data from `h-50` to `h`, and exits gracefully. This process takes about 5 minutes, so we set the TTL for block info in Redis to 650 seconds (50 * 13 seconds, the average ETH block time). Concurrently, the block notifier publishes real-time block info to Redis with the same TTL. Initially, our datastore holds more than 50 blocks, but it eventually stabilizes at 50 blocks. Despite the initial load, Redis memory usage remains well within its capabilities.
+In the design, we start the **Bootstrapper** and **BlockNotification** services simultaneously. The Bootstrapper fetches the latest block height (`h`), retrieves data from `h-50` to `h`, and exits gracefully. We set the TTL for all these retreived block information in Redis to 650 seconds (50 * 13 seconds, the average ETH block time). Concurrently, the block notifier publishes real-time block info to Redis with the same TTL. Initially, our datastore holds more than 50 blocks, but it eventually stabilizes at 50 blocks. Despite the initial load, Redis memory usage remains well within its capabilities.
 
 ### Data Formatter
 The `Data Formatter` module integrates as a component rather than a standalone service, ensuring uniform data formatting across Bootstrapper and Block Subscriber. This approach maximizes code reuse and data integrity within the VC-Ethereum Data Service architecture.

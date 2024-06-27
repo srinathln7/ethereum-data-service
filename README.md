@@ -1,10 +1,6 @@
 # VC-Ethereum Data-API-Service
 
-VC-Ethereum Data-API-Service stores block info, transaction hashes, and events for the latest 50 blocks and provides API endpoints for querying events by address, blocks by number, and transactions by hash.
-
-## Objective
-
-Refer to the [project objective](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/CHALLENGE.md) and the project structure. This document outlines the purpose of the project and how the codebase is organized.
+VC-Ethereum Data-API-Service stores block info, transaction hashes, and events for the latest 50 blocks and provides API endpoints for querying events by address, blocks by number, and transactions by hash. Please refer to the [project objective](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/CHALLENGE.md) here which outlines the goal of the project and how the codebase is organized.
 
 ## Prerequisites
 
@@ -46,10 +42,14 @@ make builddown
 
 To view logs in real-time for each service:
 
-```sh
+```
+
 docker logs -f vc-api-server
+
 docker logs -f vc-bootstrapper
+
 docker logs -f vc-blocknotifier
+
 docker logs -f vc-blocksubscriber
 ```
 
@@ -92,8 +92,7 @@ Alternatively, you can test the service in your browser.
 
 ## Observation and Analysis
 
-To view real-time analytics of our local data store, click [here](http://localhost:5540) to navigate to the Redis Insight GUI. Then, manually connect the database by clicking `Add connection details manually` and using the following details 
-
+To view real-time analytics of our local data store, navigate to http://localhost:5540 in your browser to access the Redis Insight GUI. Then, manually connect the database by clicking `Add connection details manually` and using the following details 
 
 ```
 host: redis
@@ -106,9 +105,7 @@ This validates that Redis is an optimal choice for our current project requireme
 
 ## Limitations and Future Improvements
 
-In our current architecture, each service operates with a single instance, making each service vulnerable to being a single point of failure. This becomes particularly critical because if Redis experiences downtime, it impacts the entire application. To address this, we can implement well-known strategies such as deploying Redis in a high-availability configuration using Redis Sentinel or Redis Cluster. Additionally, adopting container orchestration platforms like Kubernetes can enable automatic scaling and resilience by managing multiple instances of each service. Implementing load balancing across these instances can further enhance availability and fault tolerance and incorporating monitoring and alerting mechanisms helps in promptly identifying and mitigating issues before they impact the entire system. These approaches collectively aim to enhance the reliability and availability of our application architecture.
-
-As part of future improvements, we can consider the following tasks:
+In our current architecture, each service operates with a single instance, making each service vulnerable to being a single point of failure. This becomes particularly critical because if Redis experiences downtime, it impacts the entire application. To address this, we can implement strategies such as deploying Redis in a high-availability configuration using Redis Cluster. Additionally, we can deploy these service on Kubernetes and enable automatic scaling and resilience by managing multiple instances of each service. Implementing load balancing across these instances can further enhance availability and fault tolerance and incorporating monitoring and alerting mechanisms helps in promptly identifying and mitigating issues before they impact the entire system. These approaches collectively aim to enhance the reliability and availability of our application architecture.
 
 ### Easy-to-Query APIs
 
@@ -122,7 +119,7 @@ To secure the API, I would implement the following measures:
   
 - **Rate Limiting:** Implement rate limiting to prevent abuse and protect the service from being overwhelmed by too many requests.
     
-- **HTTPS:** Use HTTPS to encrypt communication between clients and the API.
+- **HTTPS:** Use HTTPS to encrypt communication between clients and our API service.
 
 
 ## References

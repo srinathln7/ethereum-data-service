@@ -152,7 +152,7 @@ using module mode; GOMOD=/home/srinathln7/go/src/github.com/srinathLN7/ethereum-
 		
 			
 			
-			<h2 id="FormatBlockData">func <a href="/src/ethereum-data-service/internal/model/model.go?s=1232:1314#L18">FormatBlockData</a>
+			<h2 id="FormatBlockData">func <a href="/src/ethereum-data-service/internal/model/model.go?s=1340:1422#L19">FormatBlockData</a>
 				<a class="permalink" href="#FormatBlockData">&#xb6;</a>
 				
 				
@@ -199,7 +199,7 @@ Block represents an Ethereum block, containing both header and body information.
 		
 			
 			
-			<h2 id="Data">type <a href="/src/ethereum-data-service/internal/model/model.go?s=645:1089#L10">Data</a>
+			<h2 id="Data">type <a href="/src/ethereum-data-service/internal/model/model.go?s=753:1197#L11">Data</a>
 				<a class="permalink" href="#Data">&#xb6;</a>
 				
 				
@@ -207,7 +207,8 @@ Block represents an Ethereum block, containing both header and body information.
 			<p>
 Data represents storage data in Redis DB for Ethereum-related information.
 It includes Ethereum block data, transaction hashes mapped to transactions,
-and event data mapped to specific event addresses.
+and event data mapped to specific event addresses. Block data byitself
+contains Tx hashes but as per the challenge description, we store it explicitly here
 </p>
 
 			<pre>type Data struct {
