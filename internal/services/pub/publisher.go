@@ -28,7 +28,8 @@ func RunBlockNotifierSvc(client *client.Client, cfg *config.Config, shutdown cha
 	log.Println("Listening for new blocks from the Ethereum Blockchain...")
 	err := listenForBlocks(ctx, ethClient, rdb, cfg, shutdown)
 	if err != nil {
-		log.Fatalf("error in block listener: %v", err)
+		// Prefered not to throw Fatalf to keep retrying in case of connection timeout
+		log.Printf("error in block listener: %v", err)
 	}
 }
 
