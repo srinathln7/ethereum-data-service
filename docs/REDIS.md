@@ -2,18 +2,18 @@
 
 Redis emerges as an ideal choice for our project due to its exceptional performance, real-time capabilities, and scalability, which are essential for effectively managing data related to the most recent 50 Ethereum blocks and supporting a basic API. The factors considered while choosing Redis are outlined below:
 
-## Estimate Storage Requirements
+## Estimate Storage Requirements 
 
-Based on recent Ethereum block sizes from [Etherscan](https://etherscan.io/chart/blocksize), with an average block size of 150-200KB over the last 6 months:
+Based on recent Ethereum block sizes from [Etherscan](https://etherscan.io/chart/blocksize), with an average block size of 150-200KB over the last 6 months, let us perform a simple back of the envelope calculation to appropximate our storage requirements
 
 - **Block Data**: Approximately 200 KB per block.
 - **Transaction Data**:
   - Average of 200 transactions per block.
-  - Each transaction key (Hash: 32 bytes) and value (750 bytes) contribute to about 156 KB per block.
+  - Each transaction key (Hash: 32 bytes) and actual tx data (750 bytes) contribute to about 156 KB per block.
 - **Event Data**:
   - Assuming an average of 2 events per transaction, contributing approximately 312 KB per block.
 
-Total Estimated Storage per Block: 200 KB (block) + 156 KB (transactions) + 312 KB (events) ≈ 668 KB 
+**Total Estimated Storage per Block**: 200 KB (block) + 156 KB (transactions) + 312 KB (events) ≈ 668 KB 
 **Total for 50 Blocks**: 668 KB * 50 ≈ 33.4 MB
 
 With additional overhead for indexing and metadata, our total storage requirement approximates to about 40MB, comfortably manageable within Redis's in-memory model.
@@ -34,7 +34,7 @@ With additional overhead for indexing and metadata, our total storage requiremen
 
 ### Concurrent Requests
 
-- **Concurrency Support**: Redis efficiently handles multiple concurrent client requests, enhancing application responsiveness.
+- **Concurrency Support**: Redis efficiently handles multiple concurrent client requests thereby enhancing application responsiveness.
 
 ### Performance Monitoring
 
@@ -44,6 +44,4 @@ With additional overhead for indexing and metadata, our total storage requiremen
 
 - **Simplicity and Go Support**: Redis's straightforward data structures and extensive library support in Go streamline development efforts and maintenance tasks, enhancing developer productivity and code maintainability.
 
-### Considerations and Future Proofing
 
-To strengthen our approach further, we continuously monitor Redis's performance metrics against benchmarks, ensuring it meets our evolving needs effectively. While Redis is well-suited for our current requirements, we acknowledge the importance of periodically evaluating alternative solutions to mitigate potential risks and ensure long-term scalability and reliability.
