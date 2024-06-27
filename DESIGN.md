@@ -1,6 +1,7 @@
 # VC-Ethereum Data Service Architecture
 
-The pivotal decision in our architecture aimed at storing information for the most recent 50 blocks centers around our database choice. Given the project's scope and requirements detailed [here](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/CHALLENGE.md), Redis was selected as our local store. The rationale behind this decision is thoroughly outlined [here](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/REDIS.md).
+The pivotal decision in our architecture aimed at storing information for the most recent 50 blocks centers around our database choice. Given the project's scope and requirements detailed [here](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/CHALLENGE.md), Redis was selected as our local store. The rationale behind this decision is thoroughly outlined [here](https://github.com/srinathln7/ethereum-data-service/blob/main/docs/REDIS.md). This design strives to efficiently combine real-time and historical Ethereum data processing (most recent 50 blocks at the time of launching the application), leveraging Redis for both message brokering and data storage. The API Service ensures that clients have quick and reliable access to the latest blockchain data.
+
 
 ```mermaid
 graph TD
@@ -16,7 +17,7 @@ graph TD
 
     subgraph VC-ETH-Data-Service
         direction TB
-        ethereumNode["Ethereum Node<br/>(WebSocket & HTTPS RPC)"]:::ethereumNodeStyle
+        ethereumNode["Ethereum Node<br/>(HTTPS RPC & WebSocket)"]:::ethereumNodeStyle
         blockNotification["Block<br/>Notification"]:::blockNotificationStyle
         bootstrapper["Bootstrapper"]:::bootstrapperStyle
         redisChannel(["Redis Channel"]):::redisChannelStyle
@@ -99,8 +100,6 @@ The VC-Ethereum Data Service architecture streamlines the retrieval, processing,
 
 In the design, we start the **Bootstrapper** and **BlockNotification** services simultaneously. The Bootstrapper fetches the latest block height (`h`), retrieves data from `h-50` to `h`, and exits gracefully. This process takes about 5 minutes, so we set the TTL for block info in Redis to 650 seconds (50 * 13 seconds, the average ETH block time). Concurrently, the block notifier publishes real-time block info to Redis with the same TTL. Initially, our datastore holds more than 50 blocks, but it eventually stabilizes at 50 blocks. Despite the initial load, Redis memory usage remains well within its capabilities.
 
-#### Data Formatter
-
+### Data Formatter
 The `Data Formatter` module integrates as a component rather than a standalone service, ensuring uniform data formatting across Bootstrapper and Block Subscriber. This approach maximizes code reuse and data integrity within the VC-Ethereum Data Service architecture.
 
-Overall, this design strives to efficiently combine real-time and historical Ethereum data processing, leveraging Redis for both message brokering and data storage. The API Service ensures that clients have quick and reliable access to the latest blockchain data.

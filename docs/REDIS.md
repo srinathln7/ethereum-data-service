@@ -9,7 +9,7 @@ Based on recent Ethereum block sizes from [Etherscan](https://etherscan.io/chart
 - **Block Data**: Approximately 200 KB per block.
 - **Transaction Data**:
   - Average of 200 transactions per block.
-  - Each transaction key (Hash: 32 bytes) and actual tx data (750 bytes) contribute to about 156 KB per block.
+  - Each transaction key (Hash: 32 bytes) and actual Tx data (750 bytes) contribute to about 156 KB per block.
 - **Event Data**:
   - Assuming an average of 2 events per transaction, contributing approximately 312 KB per block.
 
@@ -34,7 +34,7 @@ With additional overhead for indexing and metadata, our total storage requiremen
 
 ### Concurrent Requests
 
-- **Concurrency Support**: Redis efficiently handles multiple concurrent client requests thereby enhancing application responsiveness.
+- **Concurrency Support**: Redis efficiently handles multiple concurrent client requests thereby enhancing application responsiveness. At the start of our application, both the **Bootstrapper** and **BlockNotification** service starts write concurrently to Redis.
 
 ### Performance Monitoring
 

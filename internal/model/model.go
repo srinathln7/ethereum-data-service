@@ -16,7 +16,8 @@ type Block struct {
 
 // Data represents storage data in Redis DB for Ethereum-related information.
 // It includes Ethereum block data, transaction hashes mapped to transactions,
-// and event data mapped to specific event addresses.
+// and event data mapped to specific event addresses. Block data byitself
+// contains Tx hashes but as per the challenge description, we store it explicitly here
 type Data struct {
 	Block             Block                         `json:"block"`              // Block holds Ethereum block information.
 	TransactionHashes map[string]*types.Transaction `json:"transaction_hashes"` // TransactionHashes maps transaction hashes to their corresponding transactions.

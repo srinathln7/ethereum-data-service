@@ -108,7 +108,7 @@ This validates that Redis is an optimal choice for our current project requireme
 
 In our current architecture, each service operates with a single instance, making each service vulnerable to being a single point of failure. This becomes particularly critical because if Redis experiences downtime, it impacts the entire application. To address this, we can implement well-known strategies such as deploying Redis in a high-availability configuration using Redis Sentinel or Redis Cluster. Additionally, adopting container orchestration platforms like Kubernetes can enable automatic scaling and resilience by managing multiple instances of each service. Implementing load balancing across these instances can further enhance availability and fault tolerance and incorporating monitoring and alerting mechanisms helps in promptly identifying and mitigating issues before they impact the entire system. These approaches collectively aim to enhance the reliability and availability of our application architecture.
 
-As part of future improvements, we consider the following tasks:
+As part of future improvements, we can consider the following tasks:
 
 ### Easy-to-Query APIs
 
@@ -124,17 +124,6 @@ To secure the API, I would implement the following measures:
     
 - **HTTPS:** Use HTTPS to encrypt communication between clients and the API.
 
-### Performance Optimization
-
-To improve the performance of the service, I would consider the following optimizations:
-
-- **Load Balancing:** Use a load balancer to distribute incoming requests across multiple instances of the service.
-  
-- **Horizontal Scaling:** Scale the service horizontally by adding more instances behind the load balancer.
-
-
-### Design to store the entire ETH mainnet data
- 
 
 ## References
 
