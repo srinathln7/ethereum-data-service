@@ -56,7 +56,7 @@ This function indexes each transaction by its hash in Redis.
 
 ### IdxEventsAndStore
 
-This function indexes each event by its address in Redis.
+This function indexes each event by its address in Redis. Before indexing, all addresses are converted to lower case to eliminate any case sensitivity.
 
 - **Parameters**:
   - `ctx context.Context`: The context for managing cancellation.
@@ -132,13 +132,6 @@ This function retrieves all block numbers stored in Redis.
 - `REDIS_PUBSUB_CH`: The Redis channel for publishing block data.
 - `REDIS_KEY_EXPIRY_TIME`: The expiry time for storing block data in Redis.
 
-## Dependencies
-
-- `github.com/redis/go-redis/v9`: Redis client library.
-- `encoding/json`: Package for JSON serialization and deserialization.
-- `github.com/ethereum/go-ethereum/core/types`: Ethereum types library.
-- `context`: Package for managing cancellation and timeouts.
-- `log`: Package for logging.
 
 ## Usage
 

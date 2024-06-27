@@ -3,6 +3,7 @@ package v1
 import (
 	"ethereum-data-service/internal/storage"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
@@ -51,7 +52,8 @@ func getEvents(rdb *redis.Client) gin.HandlerFunc {
 			return
 		}
 
-		events, err := storage.GetEventsByAddress(rdb, address)
+		// We indexed address by first converting it to lower case to eliminate case sensitivity wrt. to address
+		events, err := storage.GetEventsByAddress(rdb, strings.ToLower(address))
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get events from Redis", "details": err.Error()})
 			return

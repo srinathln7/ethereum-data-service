@@ -12,15 +12,11 @@ type Config struct {
 
 	// API_PORT is the port on which the API server will listen.
 	API_PORT string
-	// API_STATIC_FILE is the path to static files served by the API server.
-	API_STATIC_FILE string
 
 	// ETH_HTTPS_URL is the HTTPS URL for accessing the Ethereum network.
 	ETH_HTTPS_URL string
 	// ETH_WSS_URL is the WebSocket URL for accessing the Ethereum network.
 	ETH_WSS_URL string
-	// ETH_AVG_BLOCK_TIME is the average time duration (seconds) between Ethereum blocks.
-	ETH_AVG_BLOCK_TIME time.Duration
 
 	// REDIS_DB is the Redis database number to use.
 	REDIS_DB int
@@ -29,6 +25,8 @@ type Config struct {
 	// REDIS_PUBSUB_CH is the Redis Pub/Sub channel name for messaging.
 	REDIS_PUBSUB_CH string
 	// REDIS_KEY_EXPIRY_TIME is the default expiration time (seconds) for keys stored in Redis.
+	// It is calculated based on Ethereum avg block time (~13s). Currently set to 50*13=650s since
+	// we need to store info only for about 50 blocks
 	REDIS_KEY_EXPIRY_TIME time.Duration
 
 	// NUM_BLOCKS_TO_SYNC is the number of recent blocks to sync during initialization.
@@ -42,8 +40,8 @@ type Config struct {
 func LoadConfig() (*Config, error) {
 	requiredKeys := []string{
 		"DEFAULT_TIMEOUT",
-		"API_PORT", "API_STATIC_FILE",
-		"ETH_HTTPS_URL", "ETH_WSS_URL", "ETH_AVG_BLOCK_TIME",
+		"API_PORT",
+		"ETH_HTTPS_URL", "ETH_WSS_URL",
 		"REDIS_ADDR", "REDIS_DB", "REDIS_PUBSUB_CH", "REDIS_KEY_EXPIRY_TIME",
 		"NUM_BLOCKS_TO_SYNC", "BOOTSTRAP_TIMEOUT",
 	}
@@ -54,11 +52,6 @@ func LoadConfig() (*Config, error) {
 	}
 
 	defaultTimeout, err := strconv.Atoi(envMap["DEFAULT_TIMEOUT"])
-	if err != nil {
-		return nil, err
-	}
-
-	avgBlockTime, err := strconv.Atoi(envMap["ETH_AVG_BLOCK_TIME"])
 	if err != nil {
 		return nil, err
 	}
@@ -86,12 +79,10 @@ func LoadConfig() (*Config, error) {
 	return &Config{
 		DEFAULT_TIMEOUT: time.Duration(defaultTimeout) * time.Second,
 
-		API_PORT:        envMap["API_PORT"],
-		API_STATIC_FILE: envMap["API_STATIC_FILE"],
+		API_PORT: envMap["API_PORT"],
 
-		ETH_HTTPS_URL:      envMap["ETH_HTTPS_URL"],
-		ETH_WSS_URL:        envMap["ETH_WSS_URL"],
-		ETH_AVG_BLOCK_TIME: time.Duration(avgBlockTime) * time.Second,
+		ETH_HTTPS_URL: envMap["ETH_HTTPS_URL"],
+		ETH_WSS_URL:   envMap["ETH_WSS_URL"],
 
 		REDIS_DB:              rdb,
 		REDIS_KEY_EXPIRY_TIME: time.Duration(expiryTime) * time.Second,

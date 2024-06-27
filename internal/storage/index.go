@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"ethereum-data-service/internal/model"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -47,8 +48,10 @@ func IdxEventsAndStore(ctx context.Context, rdb *redis.Client, blockData *model.
 				return fmt.Errorf("error marshalling event %+v: %v", event, err)
 			}
 			// For ex key:`event:0x6000da47483062A0D734Ba3dc7576Ce6A0B645C4_20167294_0xd59016cbaf7c580e83544ac5bd98584f7ec65b6984ddbd6a7647d6873c16f63a_234`
-			// This is done to keep the key associated with every event unique
-			addressKey := fmt.Sprint(EVENT_PREFIX, event.Address.Hex(), "_", event.BlockNumber, "_", txHash, "_", event.Index)
+			// This is done to keep the key associated with every event unique. To eliminate any case senstivity, wrt to address we convert all address
+			// to lower case before indexing. For ex: Addr `0x0C04fF41b11065EEd8c9EDA4d461BA6611591395` and `0x0C04ff41b11065eed8c9eda4d461ba6611591395`
+			// all point to the same account. We do the same in the API call as well.
+			addressKey := fmt.Sprint(EVENT_PREFIX, strings.ToLower(event.Address.Hex()), "_", event.BlockNumber, "_", txHash, "_", event.Index)
 			if err := rdb.Set(ctx, addressKey, eventJSON, expiryTime).Err(); err != nil {
 				return fmt.Errorf("error storing event %s_%d in Redis: %v", event.Address, event.TxIndex, err)
 			}

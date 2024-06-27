@@ -1,6 +1,6 @@
 # VC-Ethereum Data-API-Service
 
-The VC-Ethereum Data-API-Service provides essential APIs to retrieve block, transaction, and event data for the most recent 50 blocks from the Ethereum blockchain
+VC-Ethereum Data-API-Service stores block info, transaction hashes, and events for the latest 50 blocks and provides API endpoints for querying events by address, blocks by number, and transactions by hash.
 
 ## Objective
 
@@ -100,7 +100,7 @@ host: redis
 port: 6379
 ```
 
-After continuously running the application for several hours, we monitored Redis using the Redis-Insight tool and observed that Redis peak memory consumption reached approximately 50MB. The number of indexed keys maintained averaged between 35,000 to 40,000, with Redis utilizing less than 1% of CPU resources. This performance is well within Redis's capabilities, as outlined in the official [Redis FAQ](https://redis.io/docs/latest/develop/get-started/faq/#:~:text=Redis%20can%20handle%20up%20to), which states Redis can manage up to 2^32 keys and has been tested to handle at least 250 million keys per instance.
+After continuously running the application for several hours, we monitored Redis using the Redis-Insight tool and observed that Redis peak memory consumption reached approximately 50MB. The number of indexed keys maintained averaged between 30,000 to 40,000, with Redis utilizing less than 1% of CPU resources. This performance is well within Redis's capabilities, as outlined in the official [Redis FAQ](https://redis.io/docs/latest/develop/get-started/faq/#:~:text=Redis%20can%20handle%20up%20to), which states Redis can manage up to 2^32 keys and has been tested to handle at least 250 million keys per instance.
 
 This validates that Redis is an optimal choice for our current project requirements.
 
@@ -108,11 +108,11 @@ This validates that Redis is an optimal choice for our current project requireme
 
 In our current architecture, each service operates with a single instance, making each service vulnerable to being a single point of failure. This becomes particularly critical because if Redis experiences downtime, it impacts the entire application. To address this, we can implement well-known strategies such as deploying Redis in a high-availability configuration using Redis Sentinel or Redis Cluster. Additionally, adopting container orchestration platforms like Kubernetes can enable automatic scaling and resilience by managing multiple instances of each service. Implementing load balancing across these instances can further enhance availability and fault tolerance and incorporating monitoring and alerting mechanisms helps in promptly identifying and mitigating issues before they impact the entire system. These approaches collectively aim to enhance the reliability and availability of our application architecture.
 
-As part of future improvements, we can consider the following tasks:
+As part of future improvements, we consider the following tasks:
 
 ### Easy-to-Query APIs
 
-To expose the stored data to customers in an easy-to-query API, I would consider implementing a GraphQL API (although I have worked with GraphQL in the past) on top of the existing API service. GraphQL provides a flexible and efficient way to query and retrieve data, allowing clients to request only the data they need.
+To expose the stored data to customers in an easy-to-query API, I would consider implementing a GraphQL API on top of the existing API service. GraphQL provides a flexible and efficient way to query and retrieve data, allowing clients to request only the data they need.
 
 ### API Security
 

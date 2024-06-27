@@ -13,14 +13,12 @@ Holds configuration settings for the application.
 - **Fields**:
   - `DEFAULT_TIMEOUT time.Duration`: Default timeout for network requests.
   - `API_PORT string`: Port for the API server.
-  - `API_STATIC_FILE string`: Path to static files served by the API server.
   - `ETH_HTTPS_URL string`: HTTPS URL for accessing the Ethereum network.
   - `ETH_WSS_URL string`: WebSocket URL for accessing the Ethereum network.
-  - `ETH_AVG_BLOCK_TIME time.Duration`: Average time between Ethereum blocks.
   - `REDIS_DB int`: Redis database number to use.
   - `REDIS_ADDR string`: Address of the Redis server.
   - `REDIS_PUBSUB_CH string`: Redis Pub/Sub channel name for messaging.
-  - `REDIS_KEY_EXPIRY_TIME time.Duration`: Expiration time for keys stored in Redis.
+  - `REDIS_KEY_EXPIRY_TIME time.Duration`: Expiration time for keys stored in Redis and is calculated based on avg. ETH block time.
   - `NUM_BLOCKS_TO_SYNC int`: Number of recent blocks to sync during initialization.
   - `BOOTSTRAP_TIMEOUT time.Duration`: Time after which the bootstrap service exits itself gracefully.
 

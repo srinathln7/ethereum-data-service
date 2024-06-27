@@ -148,7 +148,7 @@ using module mode; GOMOD=/home/srinathln7/go/src/github.com/srinathLN7/ethereum-
 		
 			
 			
-			<h2 id="Config">type <a href="/src/ethereum-data-service/internal/config/config.go?s=86:1455#L1">Config</a>
+			<h2 id="Config">type <a href="/src/ethereum-data-service/internal/config/config.go?s=86:1383#L1">Config</a>
 				<a class="permalink" href="#Config">&#xb6;</a>
 				
 				
@@ -160,15 +160,11 @@ using module mode; GOMOD=/home/srinathln7/go/src/github.com/srinathLN7/ethereum-
 
 <span id="Config.API_PORT"></span>    <span class="comment">// API_PORT is the port on which the API server will listen.</span>
     API_PORT <a href="/pkg/builtin/#string">string</a>
-<span id="Config.API_STATIC_FILE"></span>    <span class="comment">// API_STATIC_FILE is the path to static files served by the API server.</span>
-    API_STATIC_FILE <a href="/pkg/builtin/#string">string</a>
 
 <span id="Config.ETH_HTTPS_URL"></span>    <span class="comment">// ETH_HTTPS_URL is the HTTPS URL for accessing the Ethereum network.</span>
     ETH_HTTPS_URL <a href="/pkg/builtin/#string">string</a>
 <span id="Config.ETH_WSS_URL"></span>    <span class="comment">// ETH_WSS_URL is the WebSocket URL for accessing the Ethereum network.</span>
     ETH_WSS_URL <a href="/pkg/builtin/#string">string</a>
-<span id="Config.ETH_AVG_BLOCK_TIME"></span>    <span class="comment">// ETH_AVG_BLOCK_TIME is the average time duration (seconds) between Ethereum blocks.</span>
-    ETH_AVG_BLOCK_TIME <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>
 
 <span id="Config.REDIS_DB"></span>    <span class="comment">// REDIS_DB is the Redis database number to use.</span>
     REDIS_DB <a href="/pkg/builtin/#int">int</a>
@@ -177,6 +173,8 @@ using module mode; GOMOD=/home/srinathln7/go/src/github.com/srinathLN7/ethereum-
 <span id="Config.REDIS_PUBSUB_CH"></span>    <span class="comment">// REDIS_PUBSUB_CH is the Redis Pub/Sub channel name for messaging.</span>
     REDIS_PUBSUB_CH <a href="/pkg/builtin/#string">string</a>
 <span id="Config.REDIS_KEY_EXPIRY_TIME"></span>    <span class="comment">// REDIS_KEY_EXPIRY_TIME is the default expiration time (seconds) for keys stored in Redis.</span>
+    <span class="comment">// It is calculated based on Ethereum avg block time (~13s). Currently set to 50*13=650s since</span>
+    <span class="comment">// we need to store info only for about 50 blocks</span>
     REDIS_KEY_EXPIRY_TIME <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>
 
 <span id="Config.NUM_BLOCKS_TO_SYNC"></span>    <span class="comment">// NUM_BLOCKS_TO_SYNC is the number of recent blocks to sync during initialization.</span>
@@ -198,7 +196,7 @@ using module mode; GOMOD=/home/srinathln7/go/src/github.com/srinathLN7/ethereum-
 
 			
 				
-				<h3 id="LoadConfig">func <a href="/src/ethereum-data-service/internal/config/config.go?s=1457:1491#L32">LoadConfig</a>
+				<h3 id="LoadConfig">func <a href="/src/ethereum-data-service/internal/config/config.go?s=1385:1419#L30">LoadConfig</a>
 					<a class="permalink" href="#LoadConfig">&#xb6;</a>
 					
 					

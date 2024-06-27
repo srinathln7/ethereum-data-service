@@ -39,15 +39,7 @@ This function fetches the most recent Ethereum blocks and stores them in Redis.
   4. For each block:
      - Retrieves the block data.
      - Formats the block data.
-     - Calculates an expiry time for storing the block in Redis.
-     - Stores the block data in Redis with the calculated expiry time.
+     - Stores the block data in Redis with the pre-defined expiry time.
   5. Logs the successful loading of blocks into Redis.
 
-## Configuration
-
-### config.Config
-
-- `BOOTSTRAP_TIMEOUT`: The timeout duration for the bootstrap service.
-- `NUM_BLOCKS_TO_SYNC`: The number of recent blocks to fetch and store.
-- `ETH_AVG_BLOCK_TIME`: The average time taken to produce a new block in Ethereum (used to calculate expiry times).
 

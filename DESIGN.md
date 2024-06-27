@@ -51,7 +51,7 @@ The VC-Ethereum Data Service architecture streamlines the retrieval, processing,
 - **Documentation**: For more details on different JSON RPC calls supported, please refer to the [Ethereum JSON-RPC](https://ethereum.org/en/developers/docs/apis/json-rpc/).
 
 **Bootstrapper**
-- **Role**: Retrieves historical block data from the Ethereum Node using HTTPS RPC.
+- **Role**: Retrieves the most recent 50 block data from the Ethereum Node using HTTPS RPC.
 - **Flow**: Initiates an HTTPS request to fetch the latest 50 blocks for initial synchronization.
 - **Documentation**: For more details, please refer to the [bootstrapper README](https://github.com/srinathln7/ethereum-data-service/tree/main/internal/services/bootstrapper).
 
@@ -93,7 +93,13 @@ The VC-Ethereum Data Service architecture streamlines the retrieval, processing,
 - **Flow**: Provides real-time GUI monitoring of Redis operations, complementing `redis-cli`.
 
 
-## Remark
+## Remarks
+
+### TTL for Blockdata in Redis
+
+In the design, we start the **Bootstrapper** and **BlockNotification** services simultaneously. The Bootstrapper fetches the latest block height (`h`), retrieves data from `h-50` to `h`, and exits gracefully. This process takes about 5 minutes, so we set the TTL for block info in Redis to 650 seconds (50 * 13 seconds, the average ETH block time). Concurrently, the block notifier publishes real-time block info to Redis with the same TTL. Initially, our datastore holds more than 50 blocks, but it eventually stabilizes at 50 blocks. Despite the initial load, Redis memory usage remains well within its capabilities.
+
+#### Data Formatter
 
 The `Data Formatter` module integrates as a component rather than a standalone service, ensuring uniform data formatting across Bootstrapper and Block Subscriber. This approach maximizes code reuse and data integrity within the VC-Ethereum Data Service architecture.
 

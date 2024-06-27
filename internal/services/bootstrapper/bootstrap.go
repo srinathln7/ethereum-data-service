@@ -36,6 +36,7 @@ func RunBootstrapSvc(client *client.Client, cfg *config.Config) {
 	totalTime := time.Since(startTime)
 	log.Printf("Bootstrapper successfully completed in %s", totalTime)
 
+	// Once the bootstrapper finished loading 50 blocks, it shuts down succesfully
 	log.Println("Shutting down bootstraper gracefully...")
 	os.Exit(0)
 
@@ -68,12 +69,7 @@ func loadRecentBlockData(ctx context.Context, ethClient *ethclient.Client, rdb *
 			return err
 		}
 
-		// Calculate expiry time for each block data
-		// For example: Assume blocks are [B0....B49]. B0 data will expire after the first 13 seconds, B1 after the next 13 seconds, and so on.
-		// On average, it takes 12 seconds to produce a new block in Ethereum. We set the expiry to 13 seconds to provide a safety margin.
-		expiryTime := time.Duration((n - i + 1)) * cfg.ETH_AVG_BLOCK_TIME
-
-		err = storage.AddBlockDataToDB(ctx, rdb, blockDataInBytes, expiryTime)
+		err = storage.AddBlockDataToDB(ctx, rdb, blockDataInBytes, cfg.REDIS_KEY_EXPIRY_TIME)
 		if err != nil {
 			return err
 		}
